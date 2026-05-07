@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sreejith Sreekumar — Portfolio CV</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cyan:#00f5ff; --blue:#0066ff; --purple:#7b2fff;
+  --pink:#ff2d78; --gold:#ffd700;
+  --dark:#030814; --darker:#010509;
+  --card:rgba(0,20,50,0.75);
+  --glow:0 0 30px rgba(0,245,255,0.4);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--dark);color:#e0f4ff;font-family:'Rajdhani',sans-serif;overflow-x:hidden;cursor:none;}
+
+/* ===== CURSOR ===== */
+#cur{position:fixed;width:24px;height:24px;border:2px solid var(--cyan);border-radius:50%;pointer-events:none;z-index:9999;transition:transform .15s,border-color .2s,width .2s,height .2s;mix-blend-mode:screen;}
+#cur-dot{position:fixed;width:5px;height:5px;background:var(--cyan);border-radius:50%;pointer-events:none;z-index:9999;mix-blend-mode:screen;transition:transform .08s;}
+#cur.big{width:50px;height:50px;border-color:#fff;background:rgba(0,245,255,0.05);}
+
+/* ===== CANVAS ===== */
+#bgc{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-track{background:var(--darker);}
+::-webkit-scrollbar-thumb{background:linear-gradient(var(--cyan),var(--purple));border-radius:2px;}
+
+/* ===== SECTION TRANSITION CANVAS ===== */
+#transition-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:50;pointer-events:none;opacity:0;}
+
+/* ===== NAV ===== */
+#topnav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:1rem 2rem;
+  display:flex;justify-content:space-between;align-items:center;
+  background:linear-gradient(to bottom,rgba(3,8,20,0.95),transparent);
+  backdrop-filter:blur(4px);
+  border-bottom:1px solid rgba(0,245,255,0.08);
+}
+.nav-logo{font-family:'Orbitron',monospace;font-size:1rem;font-weight:900;color:var(--cyan);letter-spacing:2px;}
+.nav-logo span{color:rgba(200,220,255,0.4);}
+.nav-links{display:flex;gap:2rem;}
+.nav-link{
+  font-family:'Share Tech Mono',monospace;font-size:0.75rem;letter-spacing:2px;
+  color:rgba(200,220,255,0.5);text-decoration:none;cursor:pointer;
+  transition:color .3s,text-shadow .3s;border:none;background:none;
+}
+.nav-link:hover,.nav-link.active{color:var(--cyan);text-shadow:0 0 10px var(--cyan);}
+
+/* ===== SECTION DIVIDER / TRANSITION ZONE ===== */
+.section-bridge{
+  position:relative;height:200px;overflow:hidden;z-index:1;
+  display:flex;align-items:center;justify-content:center;
+}
+.bridge-label{
+  font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:6px;
+  color:rgba(0,245,255,0.3);z-index:2;position:relative;
+  animation:bridgePulse 2s ease-in-out infinite;
+}
+@keyframes bridgePulse{0%,100%{opacity:.3}50%{opacity:.8}}
+
+/* Falling objects container */
+.fall-zone{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.fall-obj{
+  position:absolute;
+  animation:fallBounce var(--dur,1.5s) cubic-bezier(.22,.61,.36,1) var(--delay,0s) both;
+  opacity:0;
+}
+@keyframes fallBounce{
+  0%{opacity:0;transform:translateY(-120px) rotate(0deg) scale(0.5);}
+  60%{opacity:1;transform:translateY(20px) rotate(var(--rot,180deg)) scale(1.1);}
+  75%{transform:translateY(-12px) rotate(var(--rot2,200deg)) scale(0.95);}
+  88%{transform:translateY(6px) rotate(var(--rot3,190deg)) scale(1.02);}
+  100%{opacity:1;transform:translateY(0px) rotate(var(--rot4,195deg)) scale(1);}
+}
+
+/* section divider line */
+.divider-line{
+  position:absolute;left:0;right:0;height:1px;top:50%;
+  background:linear-gradient(to right,transparent,rgba(0,245,255,0.3),rgba(123,47,255,0.3),transparent);
+}
+
+/* ===== SECTIONS ===== */
+section{position:relative;z-index:1;}
+.section-wrap{min-height:100vh;padding:8rem 2rem 4rem;max-width:1200px;margin:0 auto;}
+
+/* ===== HERO ===== */
+#hero{height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;perspective:900px;overflow:hidden;}
+.hero-grid{
+  position:absolute;inset:0;
+  background-image:linear-gradient(rgba(0,245,255,0.06) 1px,transparent 1px),linear-gradient(90deg,rgba(0,245,255,0.06) 1px,transparent 1px);
+  background-size:50px 50px;
+  animation:gridMove 6s linear infinite;
+  transform:rotateX(55deg) scale(2.2);transform-origin:50% 100%;
+}
+@keyframes gridMove{from{background-position:0 0}to{background-position:0 50px}}
+
+.hero-ring{
+  position:absolute;border-radius:50%;border:1px solid rgba(0,245,255,0.12);
+  animation:ringExpand 4s ease-in-out infinite;
+}
+@keyframes ringExpand{0%{transform:scale(1);opacity:.5}100%{transform:scale(2.5);opacity:0}}
+
+.hero-content{text-align:center;animation:heroIn 1.2s ease-out forwards;opacity:0;position:relative;z-index:2;}
+@keyframes heroIn{from{opacity:0;transform:translateY(50px) rotateX(-15deg)}to{opacity:1;transform:translateY(0) rotateX(0)}}
+
+.status-pill{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 18px;border-radius:20px;
+  background:rgba(0,245,255,0.06);border:1px solid rgba(0,245,255,0.25);
+  font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--cyan);
+  letter-spacing:2px;margin-bottom:1.5rem;
+}
+.status-dot{width:7px;height:7px;background:#00ff88;border-radius:50%;animation:statusBlink 1.5s ease-in-out infinite;box-shadow:0 0 8px #00ff88;}
+@keyframes statusBlink{0%,100%{opacity:1}50%{opacity:.3}}
+
+.hero-name{
+  font-family:'Orbitron',monospace;font-size:clamp(2.8rem,8vw,6.5rem);font-weight:900;line-height:.95;
+  background:linear-gradient(135deg,#fff 0%,var(--cyan) 45%,var(--blue) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 0 40px rgba(0,245,255,0.4));margin-bottom:.6rem;
+}
+.hero-sub{font-size:clamp(.9rem,2vw,1.15rem);color:rgba(200,230,255,.6);letter-spacing:4px;font-weight:300;margin-bottom:2.5rem;}
+
+.hero-tags{display:flex;gap:.8rem;flex-wrap:wrap;justify-content:center;margin-bottom:2.5rem;}
+.hero-tag{
+  padding:7px 18px;border:1px solid rgba(0,245,255,.25);border-radius:4px;
+  font-size:.78rem;letter-spacing:2px;color:var(--cyan);background:rgba(0,245,255,.04);
+  position:relative;overflow:hidden;transition:all .3s;
+}
+.hero-tag::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 40%,rgba(0,245,255,.1));transform:translateX(-100%);transition:transform .4s;}
+.hero-tag:hover::before{transform:translateX(0);}
+.hero-tag:hover{box-shadow:0 0 20px rgba(0,245,255,.3);border-color:var(--cyan);}
+
+.hero-cta{display:flex;gap:1rem;justify-content:center;margin-bottom:2rem;}
+.btn-primary{
+  padding:12px 32px;background:linear-gradient(135deg,var(--blue),var(--cyan));
+  border:none;border-radius:4px;color:#000;font-family:'Orbitron',monospace;
+  font-size:.78rem;font-weight:700;letter-spacing:2px;cursor:pointer;
+  transition:transform .3s,box-shadow .3s;
+}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,245,255,.4);}
+.btn-outline{
+  padding:12px 32px;background:transparent;
+  border:1px solid rgba(0,245,255,.35);border-radius:4px;color:var(--cyan);
+  font-family:'Orbitron',monospace;font-size:.78rem;letter-spacing:2px;cursor:pointer;
+  transition:all .3s;
+}
+.btn-outline:hover{background:rgba(0,245,255,.07);border-color:var(--cyan);box-shadow:0 0 20px rgba(0,245,255,.2);}
+
+.hero-info{display:flex;gap:2rem;flex-wrap:wrap;justify-content:center;font-family:'Share Tech Mono',monospace;font-size:.8rem;color:rgba(200,220,255,.5);}
+.hero-info a{color:var(--cyan);text-decoration:none;}
+
+.scroll-cue{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:4px;}
+.scroll-mouse{width:24px;height:40px;border:1.5px solid rgba(0,245,255,.4);border-radius:12px;display:flex;justify-content:center;padding-top:6px;}
+.scroll-wheel{width:4px;height:8px;background:var(--cyan);border-radius:2px;animation:wheelScroll 1.8s ease-in-out infinite;}
+@keyframes wheelScroll{0%,100%{transform:translateY(0);opacity:1}100%{transform:translateY(12px);opacity:0}}
+.scroll-txt{font-family:'Share Tech Mono',monospace;font-size:.65rem;letter-spacing:3px;color:rgba(0,245,255,.4);margin-top:4px;}
+
+/* ===== STATS ===== */
+.stats-bar{
+  position:relative;z-index:1;
+  background:rgba(0,10,30,.9);
+  border-top:1px solid rgba(0,245,255,.08);border-bottom:1px solid rgba(0,245,255,.08);
+  padding:4rem 2rem;display:flex;justify-content:center;gap:4rem;flex-wrap:wrap;
+}
+.stat-item{text-align:center;position:relative;}
+.stat-item::after{content:'';position:absolute;right:-2rem;top:50%;transform:translateY(-50%);width:1px;height:50px;background:linear-gradient(to bottom,transparent,rgba(0,245,255,.2),transparent);}
+.stat-item:last-child::after{display:none;}
+.stat-num{font-family:'Orbitron',monospace;font-size:3rem;font-weight:900;color:var(--cyan);filter:drop-shadow(0 0 20px rgba(0,245,255,.5));display:block;}
+.stat-label{font-size:.78rem;letter-spacing:3px;color:rgba(200,220,255,.45);text-transform:uppercase;margin-top:.2rem;}
+.stat-bar-fill{height:2px;background:linear-gradient(to right,var(--blue),var(--cyan));border-radius:1px;width:0;transition:width 1.5s cubic-bezier(.22,.61,.36,1);margin-top:.5rem;}
+
+/* ===== SECTION HEADERS ===== */
+.sec-label{font-family:'Share Tech Mono',monospace;font-size:.72rem;color:var(--cyan);letter-spacing:5px;margin-bottom:.4rem;opacity:.7;}
+.sec-title{
+  font-family:'Orbitron',monospace;font-size:clamp(2rem,5vw,3.2rem);font-weight:900;margin-bottom:3rem;
+  position:relative;display:inline-block;
+}
+.sec-title .char{display:inline-block;transition:transform .4s,color .4s,text-shadow .4s;}
+.sec-title:hover .char{color:var(--cyan);text-shadow:0 0 20px var(--cyan);animation:charWave .6s ease-in-out var(--ci,.0s) both;}
+@keyframes charWave{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.sec-title::after{content:'';position:absolute;bottom:-8px;left:0;width:0;height:2px;background:linear-gradient(to right,var(--cyan),transparent);transition:width .8s ease;}
+.sec-title.visible::after{width:70%;}
+
+/* ===== REVEAL ANIMATIONS ===== */
+.reveal{opacity:0;transform:translateY(60px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1);}
+.reveal.visible{opacity:1;transform:none;}
+.reveal-left{opacity:0;transform:translateX(-60px) rotateY(15deg);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1);}
+.reveal-left.visible{opacity:1;transform:none;}
+.reveal-right{opacity:0;transform:translateX(60px) rotateY(-15deg);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1);}
+.reveal-right.visible{opacity:1;transform:none;}
+.reveal-pop{opacity:0;transform:scale(.8) translateY(30px);transition:opacity .5s cubic-bezier(.16,1,.3,1),transform .5s cubic-bezier(.16,1,.3,1);}
+.reveal-pop.visible{opacity:1;transform:none;}
+
+/* ===== EXPERIENCE ===== */
+.timeline{position:relative;padding-left:2rem;}
+.timeline::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:1px;
+  background:linear-gradient(to bottom,transparent,var(--cyan),var(--blue),var(--purple),transparent);
+}
+.exp-card{
+  background:var(--card);border:1px solid rgba(0,245,255,.12);border-radius:12px;
+  padding:2rem;margin-bottom:2rem;position:relative;overflow:hidden;
+  backdrop-filter:blur(12px);transition:transform .4s,box-shadow .4s,border-color .4s;
+  transform-style:preserve-3d;
+}
+.exp-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(to right,transparent,var(--cyan),transparent);
+  opacity:0;transition:opacity .4s;
+}
+.exp-card:hover{transform:translateX(8px) translateY(-4px);box-shadow:0 20px 60px rgba(0,102,255,.25),0 0 0 1px rgba(0,245,255,.15);border-color:rgba(0,245,255,.3);}
+.exp-card:hover::before{opacity:1;}
+
+/* Timeline dot */
+.tl-dot{
+  position:absolute;left:-2.4rem;top:2rem;width:14px;height:14px;
+  border-radius:50%;background:var(--dark);border:2px solid var(--cyan);
+  box-shadow:0 0 15px var(--cyan);transition:transform .3s,box-shadow .3s;
+}
+.exp-card:hover .tl-dot{transform:scale(1.4);box-shadow:0 0 25px var(--cyan);}
+
+/* Gradient shine */
+.card-shine{
+  position:absolute;inset:0;opacity:0;
+  background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(0,245,255,.05) 0%,transparent 60%);
+  transition:opacity .3s;pointer-events:none;border-radius:12px;
+}
+.exp-card:hover .card-shine{opacity:1;}
+
+.exp-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:.8rem;margin-bottom:1rem;}
+.exp-co{font-family:'Orbitron',monospace;font-size:1rem;color:var(--cyan);font-weight:700;}
+.exp-role{font-size:.95rem;color:rgba(210,235,255,.85);font-weight:600;margin-top:3px;}
+.exp-type{font-size:.72rem;color:rgba(0,245,255,.5);margin-top:2px;font-family:'Share Tech Mono',monospace;}
+.exp-period{
+  font-family:'Share Tech Mono',monospace;font-size:.75rem;
+  color:rgba(0,245,255,.7);background:rgba(0,245,255,.07);
+  padding:5px 14px;border-radius:20px;border:1px solid rgba(0,245,255,.18);white-space:nowrap;
+}
+.exp-bullets{list-style:none;margin-top:.8rem;display:flex;flex-direction:column;gap:.45rem;}
+.exp-bullets li{padding-left:1.4rem;position:relative;font-size:.9rem;color:rgba(200,220,255,.7);line-height:1.55;}
+.exp-bullets li::before{content:'▹';position:absolute;left:0;color:var(--cyan);font-size:.78rem;}
+.exp-bullets li strong{color:var(--cyan);}
+
+/* Tags on card */
+.exp-tags{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:1rem;}
+.exp-tag-chip{
+  padding:3px 10px;font-size:.7rem;border-radius:3px;
+  background:rgba(0,102,255,.1);border:1px solid rgba(0,102,255,.2);
+  color:rgba(150,200,255,.7);font-family:'Share Tech Mono',monospace;
+}
+
+/* ===== SKILLS ===== */
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1.2rem;}
+.skill-cat{
+  background:var(--card);border:1px solid rgba(0,245,255,.1);border-radius:10px;
+  padding:1.4rem;backdrop-filter:blur(12px);position:relative;overflow:hidden;
+  transition:transform .3s,box-shadow .3s;
+}
+.skill-cat::before{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:linear-gradient(to right,transparent,var(--blue),transparent);
+}
+.skill-cat:hover{transform:translateY(-5px);box-shadow:0 12px 40px rgba(0,102,255,.2);}
+.skill-cat-icon{font-size:1.6rem;margin-bottom:.6rem;}
+.skill-cat-title{font-family:'Orbitron',monospace;font-size:.7rem;color:var(--cyan);letter-spacing:2px;margin-bottom:.8rem;}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem;}
+.chip{
+  padding:4px 11px;background:rgba(0,102,255,.1);border:1px solid rgba(0,102,255,.22);
+  border-radius:4px;font-size:.78rem;color:rgba(180,220,255,.8);
+  transition:all .2s;font-weight:600;
+}
+.chip:hover{background:rgba(0,245,255,.12);border-color:var(--cyan);color:var(--cyan);transform:scale(1.06);box-shadow:0 0 10px rgba(0,245,255,.25);}
+
+/* ===== SKILL BARS ===== */
+.skill-bar-wrap{margin-bottom:.8rem;}
+.skill-bar-label{display:flex;justify-content:space-between;font-size:.8rem;color:rgba(200,220,255,.7);margin-bottom:.3rem;}
+.skill-bar-label span:last-child{color:var(--cyan);font-family:'Share Tech Mono',monospace;}
+.skill-bar-track{height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;}
+.skill-bar-fill{height:100%;background:linear-gradient(to right,var(--blue),var(--cyan));border-radius:3px;width:0;transition:width 1.4s cubic-bezier(.22,.61,.36,1);}
+.skill-bar-fill.glow{box-shadow:0 0 8px var(--cyan);}
+
+/* ===== PROJECTS ===== */
+.proj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:1.4rem;}
+.proj-card{
+  background:var(--card);border:1px solid rgba(123,47,255,.18);border-radius:12px;
+  padding:1.8rem;backdrop-filter:blur(12px);position:relative;overflow:hidden;
+  transition:transform .4s cubic-bezier(.16,1,.3,1),box-shadow .4s;
+  transform-style:preserve-3d;cursor:default;
+}
+.proj-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(to right,var(--purple),var(--blue),var(--cyan));
+  transform:scaleX(0);transform-origin:left;transition:transform .5s ease;
+}
+.proj-card:hover::before{transform:scaleX(1);}
+.proj-card:hover{transform:translateY(-10px) rotateX(4deg) rotateY(-2deg);box-shadow:0 25px 70px rgba(123,47,255,.3),0 0 0 1px rgba(0,245,255,.1);}
+
+.proj-icon-wrap{width:52px;height:52px;border-radius:12px;background:rgba(0,102,255,.1);border:1px solid rgba(0,102,255,.2);display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin-bottom:1rem;}
+.proj-name{font-family:'Orbitron',monospace;font-size:.88rem;color:var(--cyan);font-weight:700;margin-bottom:.3rem;}
+.proj-org{font-family:'Share Tech Mono',monospace;font-size:.72rem;color:rgba(200,200,255,.4);margin-bottom:.8rem;}
+.proj-desc{font-size:.88rem;color:rgba(200,220,255,.65);line-height:1.6;}
+.proj-footer{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:1rem;}
+.proj-badge{padding:3px 9px;font-size:.68rem;border-radius:3px;background:rgba(123,47,255,.12);border:1px solid rgba(123,47,255,.25);color:rgba(180,160,255,.8);font-family:'Share Tech Mono',monospace;}
+
+/* ===== CERTS ===== */
+.certs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.2rem;}
+.cert-card{
+  background:var(--card);border:1px solid rgba(0,245,255,.1);border-radius:10px;
+  padding:1.5rem;backdrop-filter:blur(12px);position:relative;overflow:hidden;
+  transition:transform .3s,box-shadow .3s;
+}
+.cert-card:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 15px 40px rgba(0,245,255,.15);}
+.cert-yr{font-family:'Orbitron',monospace;font-size:2rem;color:rgba(0,245,255,.09);position:absolute;top:1rem;right:1rem;font-weight:900;}
+.cert-icon{font-size:1.4rem;margin-bottom:.6rem;}
+.cert-name{font-weight:700;font-size:.95rem;margin-bottom:.3rem;color:rgba(220,240,255,.9);}
+.cert-issuer{font-family:'Share Tech Mono',monospace;font-size:.72rem;color:var(--cyan);opacity:.65;}
+
+/* ===== EDUCATION ===== */
+.edu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1.4rem;}
+.edu-card{
+  background:var(--card);border:1px solid rgba(0,102,255,.18);border-radius:12px;
+  padding:2rem;backdrop-filter:blur(12px);position:relative;overflow:hidden;
+  transition:transform .3s,box-shadow .3s;
+}
+.edu-card:hover{transform:translateY(-7px);box-shadow:0 15px 40px rgba(0,102,255,.2);}
+.edu-degree{font-family:'Orbitron',monospace;font-size:.85rem;color:var(--cyan);font-weight:700;margin-bottom:.5rem;}
+.edu-school{font-size:1rem;color:rgba(220,240,255,.85);font-weight:600;margin-bottom:.3rem;}
+.edu-period{font-family:'Share Tech Mono',monospace;font-size:.75rem;color:rgba(0,245,255,.45);}
+
+/* ===== FLOATING DECO ===== */
+.floaters{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.cube{
+  position:absolute;transform-style:preserve-3d;
+  animation:rotateCube var(--cd,8s) linear infinite var(--cdir,normal);
+}
+@keyframes rotateCube{from{transform:rotateX(0) rotateY(0) rotateZ(0)}to{transform:rotateX(360deg) rotateY(360deg) rotateZ(180deg)}}
+.cface{position:absolute;width:100%;height:100%;border:1px solid rgba(0,245,255,.25);background:rgba(0,102,255,.02);}
+.cface.fr{transform:translateZ(var(--ch,20px));}
+.cface.bk{transform:rotateY(180deg) translateZ(var(--ch,20px));}
+.cface.lt{transform:rotateY(-90deg) translateZ(var(--ch,20px));}
+.cface.rt{transform:rotateY(90deg) translateZ(var(--ch,20px));}
+.cface.tp{transform:rotateX(90deg) translateZ(var(--ch,20px));}
+.cface.bt{transform:rotateX(-90deg) translateZ(var(--ch,20px));}
+
+/* ===== POPUP TOAST ===== */
+#toast{
+  position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(100px);
+  background:rgba(0,20,50,.95);border:1px solid var(--cyan);border-radius:8px;
+  padding:1rem 2rem;font-family:'Share Tech Mono',monospace;font-size:.8rem;
+  color:var(--cyan);z-index:200;transition:transform .5s cubic-bezier(.16,1,.3,1),opacity .5s;
+  opacity:0;box-shadow:0 0 30px rgba(0,245,255,.3);white-space:nowrap;
+}
+#toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+
+/* ===== FOOTER ===== */
+footer{
+  position:relative;z-index:1;padding:5rem 2rem 3rem;text-align:center;
+  border-top:1px solid rgba(0,245,255,.07);background:rgba(0,5,15,.9);
+}
+.foot-name{font-family:'Orbitron',monospace;font-size:1.6rem;color:var(--cyan);margin-bottom:.3rem;font-weight:700;}
+.foot-contact{font-family:'Share Tech Mono',monospace;font-size:.82rem;color:rgba(200,220,255,.45);display:flex;gap:2rem;justify-content:center;flex-wrap:wrap;margin-top:1rem;}
+.foot-contact a{color:var(--cyan);text-decoration:none;}
+.foot-copy{margin-top:2.5rem;color:rgba(0,245,255,.15);font-size:.72rem;font-family:'Share Tech Mono',monospace;}
+
+/* ===== SECTION POPUP BADGE ===== */
+.section-popup{
+  position:fixed;left:2rem;top:50%;transform:translateY(-50%);
+  z-index:90;display:flex;flex-direction:column;gap:6px;
+}
+.sp-dot{
+  width:6px;height:6px;border-radius:50%;background:rgba(0,245,255,.2);
+  transition:all .3s;cursor:pointer;
+}
+.sp-dot.act{background:var(--cyan);box-shadow:0 0 12px var(--cyan);width:8px;height:8px;}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+  .section-wrap{padding:6rem 1rem 3rem;}
+  .stats-bar{gap:2rem;}
+  .stat-num{font-size:2rem;}
+  #topnav .nav-links{display:none;}
+  .section-popup{display:none;}
+}
+
+/* ===== HERO PHOTO ===== */
+.hero-layout{display:flex;align-items:center;justify-content:center;gap:4rem;flex-wrap:wrap;}
+.hero-photo-wrap{
+  position:relative;flex-shrink:0;
+  width:170px;height:170px;
+}
+.hero-photo-ring{
+  position:absolute;inset:-8px;border-radius:50%;
+  border:2px solid transparent;
+  background:linear-gradient(135deg,var(--cyan),var(--blue),var(--purple)) border-box;
+  -webkit-mask:linear-gradient(#fff 0 0) padding-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:destination-out;mask-composite:exclude;
+  animation:spinRing 6s linear infinite;
+}
+@keyframes spinRing{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.hero-photo-ring2{
+  position:absolute;inset:-16px;border-radius:50%;
+  border:1px solid rgba(0,245,255,0.2);
+  animation:spinRing 10s linear infinite reverse;
+}
+.hero-photo{
+  width:170px;height:170px;border-radius:50%;
+  object-fit:cover;object-position:center top;
+  border:3px solid rgba(0,245,255,0.3);
+  box-shadow:0 0 40px rgba(0,245,255,0.25),0 0 80px rgba(0,102,255,0.15);
+  position:relative;z-index:1;
+}
+.hero-text-block{text-align:center;}
+@media(min-width:700px){.hero-text-block{text-align:left;}}
+
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur-dot"></div>
+<canvas id="bgc"></canvas>
+<canvas id="transition-canvas"></canvas>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<!-- Top Nav -->
+<nav id="topnav">
+  <div class="nav-logo">SS<span>.</span>CV</div>
+  <div class="nav-links">
+    <button class="nav-link active" onclick="jumpTo('hero')">HOME</button>
+    <button class="nav-link" onclick="jumpTo('experience')">EXPERIENCE</button>
+    <button class="nav-link" onclick="jumpTo('skills')">SKILLS</button>
+    <button class="nav-link" onclick="jumpTo('projects')">PROJECTS</button>
+    <button class="nav-link" onclick="jumpTo('education')">EDUCATION</button>
+    <button class="nav-link" onclick="jumpTo('certs')">CERTS</button>
+  </div>
+</nav>
+
+<!-- Side dots -->
+<div class="section-popup" id="sidedots">
+  <div class="sp-dot act" onclick="jumpTo('hero')" title="Hero"></div>
+  <div class="sp-dot" onclick="jumpTo('experience')" title="Experience"></div>
+  <div class="sp-dot" onclick="jumpTo('skills')" title="Skills"></div>
+  <div class="sp-dot" onclick="jumpTo('projects')" title="Projects"></div>
+  <div class="sp-dot" onclick="jumpTo('education')" title="Education"></div>
+  <div class="sp-dot" onclick="jumpTo('certs')" title="Certs"></div>
+</div>
+
+<!-- ==================== HERO ==================== -->
+<section id="hero">
+  <div class="hero-grid"></div>
+
+  <!-- Expanding rings -->
+  <div class="hero-ring" style="width:300px;height:300px;left:calc(50% - 150px);top:calc(50% - 150px);animation-delay:0s;animation-duration:4s;"></div>
+  <div class="hero-ring" style="width:300px;height:300px;left:calc(50% - 150px);top:calc(50% - 150px);animation-delay:1.3s;animation-duration:4s;"></div>
+  <div class="hero-ring" style="width:300px;height:300px;left:calc(50% - 150px);top:calc(50% - 150px);animation-delay:2.6s;animation-duration:4s;"></div>
+
+  <!-- Floating cubes -->
+  <div class="floaters">
+    <div class="cube" style="--cd:9s;width:55px;height:55px;top:12%;left:6%;--ch:27px;">
+      <div class="cface fr"></div><div class="cface bk"></div><div class="cface lt"></div><div class="cface rt"></div><div class="cface tp"></div><div class="cface bt"></div>
+    </div>
+    <div class="cube" style="--cd:7s;--cdir:reverse;width:35px;height:35px;top:65%;right:8%;--ch:17px;">
+      <div class="cface fr"></div><div class="cface bk"></div><div class="cface lt"></div><div class="cface rt"></div><div class="cface tp"></div><div class="cface bt"></div>
+    </div>
+    <div class="cube" style="--cd:12s;width:75px;height:75px;bottom:15%;left:3%;--ch:37px;">
+      <div class="cface fr"></div><div class="cface bk"></div><div class="cface lt"></div><div class="cface rt"></div><div class="cface tp"></div><div class="cface bt"></div>
+    </div>
+    <div class="cube" style="--cd:6s;--cdir:reverse;width:28px;height:28px;top:30%;right:5%;--ch:14px;">
+      <div class="cface fr"></div><div class="cface bk"></div><div class="cface lt"></div><div class="cface rt"></div><div class="cface tp"></div><div class="cface bt"></div>
+    </div>
+    <!-- SVG deco -->
+    <svg style="position:absolute;top:20%;left:18%;opacity:.35;animation:float3d 7s ease-in-out infinite" width="50" height="50" viewBox="0 0 50 50">
+      <polygon points="25,3 47,43 3,43" stroke="#00f5ff" stroke-width="1.5" fill="none"/><polygon points="25,13 39,38 11,38" stroke="#0066ff" stroke-width="1" fill="none"/>
+    </svg>
+    <svg style="position:absolute;bottom:22%;right:14%;opacity:.3;animation:float3d 9s ease-in-out infinite 2s" width="55" height="55" viewBox="0 0 55 55">
+      <circle cx="27.5" cy="27.5" r="24" stroke="#00f5ff" stroke-width="1.5" stroke-dasharray="5 5"/><circle cx="27.5" cy="27.5" r="14" stroke="#7b2fff" stroke-width="1"/><circle cx="27.5" cy="27.5" r="5" fill="#00f5ff" opacity=".5"/>
+    </svg>
+    <svg style="position:absolute;top:50%;left:4%;opacity:.3;animation:float3d 6s ease-in-out infinite 1s" width="40" height="40" viewBox="0 0 40 40">
+      <rect x="8" y="8" width="24" height="24" stroke="#7b2fff" stroke-width="1.5" transform="rotate(45 20 20)" fill="none"/>
+    </svg>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-layout">
+      <div class="hero-photo-wrap">
+        <div class="hero-photo-ring"></div>
+        <div class="hero-photo-ring2"></div>
+        <img class="hero-photo" src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAEBAQEDASIAAhEBAxEB/8QAHQABAAEEAwEAAAAAAAAAAAAAAAcEBQYIAgMJAf/EAE4QAAEDAwMCBAMFBAYFCAsBAAECAwQABREGEiEHMQgTQVEiYXEUMoGRoSNCscEJFTNSYtEWJDhydRg2Q3SC4fDxFyU3U1aSk5WztNLT/8QAGgEBAAMBAQEAAAAAAAAAAAAAAAECAwQFBv/EACsRAAIDAAEEAAQGAwEAAAAAAAABAgMRIQQSMUEFEyJRFDJhgcHRIzNxQv/aAAwDAQACEQMRAD8A0ypSlAKUpQClKUApSlAKUrM+nXS/XGvrszb9OWGU8HAhSpLqC2w22pQT5ilkcpGc/Dk4zgGgMMr6hKlrCEJKlKOAAMkmtxun3gnfKmZOvNWtoCXVB2FaWirejb8JD7mNpz3Hlngd+eNjemfRjp30+t32Wx2Bh55QT5suakPvulJUUkkjAI3H7oHpQHnzpHoD1f1VAdm2jQ87yWnfKV9scahq3YB4S8pCiMEcgY+fFSDp/wAG3Ve5WxuXPlaesz6ioKiS5iluIwcAksoWjnvwo/PFb9XC82q3HE+5Qoh9nn0oP6moy154iel2kmSXb8m5SAtSPIgpLigUnByTgdx70BBGnPBBLctoVqPXbEWfvOW4EIvtBPodyyg5+W2pBsvg36XRrWwxdJl8nzUJw9IRIDKXDnuEYO36ZNVFv8XPTiSgKfj3SIV42eY0kgj54UcVGmt/GRdhLkx9N6eZYZQMNPSF7yo574H+dTjI0k7/AJH3R7+5f/8A7gP/AOawef4ILUt2QuDr+W0hSlFhpy2pVtHO1JV5nPoM4/CoF1D186r6kuqJg1I/F8rJQ1GOxA/D1qTNDeKHqfa4CWbxaYl8ShISlaiWnMe5OCFVKg2G0i03PwYdUYlvkSY120xPeabKkRmJTqXHiOyUlbaUgn/EoD51gGpPDr1m09Z3rrctESjFZKQv7LKYkufEQBhtpalnkjsOO54qdYXiv1Yu4+XLs1ujoUfhbWvBH1IB/hU29K+vGnNZXBi0TWV2m5uoyhLyh5TivZKv8wKl1yS0hSTPM2bFlQZbsObGejSWVlDrLyChaFDuFJPIPyNdNetes+nOhNZxvJ1Lpe23BPnB8qU3sWVgEZK0YUeCe5rX7XXgr0pOR52j9TXG0PDzVqZmtpktrJwUJSRsLaQcgk7zgj25oWNFaVMXUbw2dVdEtuSZFmavEJqP570u1uF1toZIKSFJSvcMA8JIwRz3xEDzTjDy2Xm1tutqKVoWnCkkcEEHsaA4UpSgFKUoBSlKAUpSgFKUoBSlKAUpSgFKUoBWWdNunWsOol1/q/SlmfnKStKXngMMsbs4Li+yRwanLwu+GS4atnf6RdRbXMt+n2ceTBeC2HZxIyDxhSW8EfEMZJ4PBrePSWmdP6Ss7do01Z4VqgowfKjNBAUoJCdyiOVKISAVKyTjkmgIH6I+FHRWlYVvu2smVag1ClCHXWXV/wCpsOhW4BCABvxwk7ypKsE7RnFbDMNQrbb22I7TEOHHbCUNtpDbbSAOAAOAAKqFVqp4y+qtxtlyRoSxzUsBxjdcHEH4wFdkZ9Mg1KWshvC99afFDa9Lvu2zR1tN9msq2uyFHaw3zyPdR/KtZtReJbqvdbrIkG9qt8d4FIjxmwA2nPoTk5471gt5ur0ZSENOtpB4QgHKh8yD7/OkiNCutt+1sNhLySNye3bvV3FeiE2y2ak1XqC/T3Z13vE6Y+6QSt149h24HH6VZUvKB3/eV6k+tVN1ZP25RQjaheCgfLt/Kqyy2NVxCni55TDfLisfpUJN+CW0vJb4jL0x8MthRKj6DgVXvRGYS1NPSESXCMbW+wPzNdv21Db32SIz5TAOFbRla/8AeNVbzEZ7alphCXP7pSUKP05xUpEaW21Pux3CqO0zu7DcMkVXTLveFNlL5SU9jtGMGuDMBKnFNlRStQOz059jVTDhyVlSHkc4ylR9QP41b0QUMRPnPh5UgE+y8qIz+VXy3XSWmSztUoutLTtwogpIPBBFcI1r8resNlOQRtJ9exGfr2qugsx4bKZCkpUtLnlOfL2A/Ki4GknJ6667gW5iAvUUxpMfthKfMKT7qIOQPpWU9LfFBqa06jai60kN3eyPrSj7UlvY8xn1OOD6egrWvUDchExL6VqWy9ny8kn6ivlmQpL21wqLDqfiB9KPHw0M9o9ZrVOiXK3sXCC+h+NIbDjTiDkKSRkGot61eH/QXUqBLfctrNp1A6hXk3WIjaoOElW5xAwlwFR+IkbiOyh3qHvCh1eZ05bm9D6jfW5FDv8AqMlR/skqOdh+WSfzrbptSVAKSQUkZBHrWUo9rLJ6eYvWHw+9Qum7siVLty7pZWlEpuUNBUgI3hKS4nktkkjg579zUSV7MVrB4q/DVa9T2dzU/Tyzxbdf4qSp+DEaS01PR3OEDADo7gjG7kHJxiCTQaldklh+LIcjyWXGXm1FC21pKVJUDggg9iDXXQClKUApSlAKUpQClKUApSlAK3S8HvhvciuxeoHUO27XU4ctVqkI5QfR51J7EfupPIPJwQKqfCf4ZU2yRa+oOu1RpTimWplstgQv9gtSQoKfC0jC0/3RkAjOeMVt6AAMDgUApSvijQEe9feojHTbQj95CEPTnT5UNlRxvcP+Vef+tJ9xv91k3W6PJfuMtCpbzhODvPt8h6e1SL40tYyb51gVbPMUq3WFCUIaCuC4QFKUfzx+FQWu6r+1tuu5UHWihQ/wKGP51pHEir8lsDLipq2XWzvB+LAzV6h/Z47Cm2nPi74wQT8uatxUuSSPMSgdipI7/WrjbbNMU+glokcnI9R8v0osS5HLZRT2Erc25AX7EHn6V3IdmQ4KmtriI47r27Qo1kErSNzlbHmGV+YB90pOT867P9C9S3EoR9ieCQBglBP171HzIrnS3y5PjDF4MVDyC75qELKgcbsFP4mq15ybHSW38SmQefVaR6EH5Vn9u6W3dMZD8lBJwNwxVW/oGVAKluJPlhO7AHH4Vn8+PpmnyJ+0YMlpMpptWNy2gFKIHJSeyqroiMNiKtW4pWQlR7nNXeJZlxJvlpbAByACPQ+9XaLpC6SkI+zw3FKBJCgMH86u7YpaysaZSeJGMxljdH3ncd53gjvjirQ4VrefYVgpO0gqPqD/ABqQkdPrrFfUtUcuJSnAUe2TVum6SkxJQkONkFGDtweTVVfF+yz6aa9GDtlSGHI0lG9pMgFBA+4rBP5HFVzbDSAC0nKXDgII4Se+f1rlfbdLbjvLfbWkrcCzxg1S2md+wJez8KinvyD6fwrRTTZk4SXkr0umF5akq7naVfOtyvCV1Sc1NZ/9Fby7uuMFGI7ijkutDtn5gVpBcZZVktqwF4Uge1VnTzWcnSWrYV8jtLEqG+F7CrhQB5BqXkuCHq5PVTNfaxrpvqy3620hB1DblfspKAVIJ5Qr1BrJayLEL+KLoZburVgTMghmHqmA2RDlKGA8jv5Lh/u5yQf3ST7mvOLVFhvGl7/MsN/t79uuUNzy347ydqknGQfmCCCCOCCCMgivYWoW8TvQi19WrMmdBWxb9Uw29sSWsYQ8nuGncDO3JODyRk8GgPNClXLU9iu+mb/MsN9guwLlCdLUhhzulQ+Y4IPcEZBGCCRVtoBSlKAUpSgFKUoBU8+EDou/1H1mzeb9bHHNI29ZVJWpZbEh0DKWk8fEM43YxxnnNRT030be9e6whaZsERUmXJXzg4DbY+8tR9AB616vaM07bdJaUtemrQ15cG2xkR2spSFKCRgrVtABUo5Uo4GSSfWgLvSlKAV0zHkx4rz6yAltBWfoBmu6qG+sfabPNjgElxhaRjvyk0B5U9Vrz/pD1K1FdGAoCVPeUBnjaFEA/kKtAhrlSmi2oBPljBX6AD2r5q6HIt+pblb321Nux5TjSgeDwsjmqrTr6W31GQnctQCUK9AK0SKvwVdhiLVdPKkDewrvhPapx0HpeNLaS680A2CNgJ5H6VgOgrN9ruaFlWUqV92thrBDaixktttpCiOTXB1dri8PR6KlT5Z2WyxQ2EpPlpJT2OO1X6NFjoxhpAx7CvkFrcsD2q7NxBjIH415r7mj14wgii+yMqRjyxz34romWiLJZU2toEKGDxV2DRTwK+gAnFZOUkzbsi/RgP8A6P2XbiHVYKE85/lWXxrbHjRQyhtISAB2q5pwE8CuSU7hwK0lbKfBWFEYeEW5URrABZBweDirHd7FEeJ3NpJJ7kVl4ayeQc1SzmQQcjnvRKWaWyL4ZEes9IRZlvWlpkeYgfCa12v0R6z3JbXkENZI5Hc1uLcWPhUexx7VCnVexNlt6Y80gJPoO5PvWnTXShPGc/WdPGdeogqS6WBtKCF87Ocgg85+VdMUFbwGSVnucdzXdc2drqwobV90qB/d+lVdnQtTkeVtH2VjhY+Xv9a96H1HzU+DbnwPax+zl/R0xzCXgp2LnvvH3k/lk/hW2Ved/hnv0eJ4hLA0hpbzL6nG0hJzgltXxfhXogKW53cFYbnIpSlZlzXzxi9D3epWnW7/AKZjRhqa2IUop2YXOaA/st2cbhztyDk8ZA5rzukMux33I77a2nWlFDiFjCkqBwQR6EGvZStDfHz0pi6a1Gx1AskZbcO9yFJuILu4CWrKtyUkZAUAonnGe2KA1ZpSlAKUpQClKl7wn9Lz1O6osRJ0YuWG2o+1XNSgsIWnOEtbgCApROQCRlKF+1AbQ+BPpINKaO/08vLP/re+tAxmnowSuJHBVggqG4Fz7xxwU7K2ZrphRY0GExChsNx40dtLTLTadqW0JGEpAHYAADFd1AKUpQCuDgykj3rnXxQ96A8s+v8AbHbX1n1RDeK1qNwccTvOVYV8QJz6YNYa2kbkgEpWBn6ipn8cVsetnXmbKwpSJzDLyCoZ/cCTj/5ahBxa/LSgKCgDn/drXeCuEw9JZYW4hZUFOpUMAelT/aHN7O71PetTunUySmc21GWpC1kA57fQVtFpUrZtjYcJKiM8n1rzOsS1Hq/D5NJoyqCraQRwavDL4AOTxVgiH1I9aujDbqu3FcbeI9RLeSsW6D2NEqBVXFLCvXg1ybbUFcg1zzem0DtIPpXFKylXeu4pJHCea6/IWewqkWy75HnhJziqWVICiciqxUJ4jsaopUVxI5SRW6kyvai1yVBQPr61gOvmW5FsdaU2FHbkH2rPZaSjIIIJFYF1AbeNofeYCipsElKRyamOd6ZWzexpGvd6gR25Ci7tQoLIx6YJ45q1zZbdtiKZaSFsyRyD8+4+Rqm1FdPtFxeClnY53HsqrI6464ny3CDtHv3+lfRVvFwfJWLZcm0H9H9o1E/Xdz1XIZLrNsY8uMtQ4S4vj89u6t5xULeDXTTWn+h1pdDQQ/cR9qeOOTnt/OpprN+SUKUpUAVZtcact+r9IXXTN1bSuHcoq47hU2lewqHwrAUCNyThST6FIPpV5pQHkT1G0dfNCaum6b1BBdiS4yztC+zjZJ2rSeykkDuPnWO1vZ/SE9NkXXR0TqLbYzYm2hYYuKkpSlTkZwgJWpRIKti9qQkZ/tVH0rROgFKUoBXpR4I9JnS/Qa3PPeZ9pvL7lwdS4x5a2wcISjnkjCNwJx9+vPvpfpiRrPqFY9MRo8mQZ8xDbqY+A4GQcuqBPA2oClZOe1etdrhM222RbdHKizFZQy3uOTtSkJGfngUBU0pSgFKUoBXw19riTjJoDUj+kT00h6z2DVTYHmMOKiO8funkc/UmtK1n4Ng7+prffx8XOM50jagsPMvOrnICkpUFKRjGeK0NZQ2Q2nuDyQO5q0XqDX3JO6H2P7XcftLmA0yN5Pqo+grYWK60yjctQQ2MDJOKj3pTaP6q0gzIdADskBauOw9BVJPvE6TNcS4264G3ClthHCQn+8T6mvJnt9rW4ke1XnT0J5yycLTKhbErW62Eq7ZVisgj3a0pAR9pZ347BQzWr8y8XOPkOMSHE4OElzGKxB/UGoGZa3hI8oE5Cd/b8a6Pw1aX5jCPVWt/lN2kz7esDa8g55HNd6Fx1kFKhg1qpo/V162oQ8HHE7hghzIx61MWmb3IdTncpe7nBPauKytRZ6FVrmtzCTwhonORXBybCZVtWtANYom4ySCEKPI5rB9W3Ke0hzYpe8jAGazilps9XglOdrGwwtyXZ0dO04VlY4rHZfUjTLrq0NzGnNoySk8GtXtYOXF18+a8UBRO1IJJNUdqsd0kqDrSn2/91skD9a7YQqS+pnFOd7f0RNmLlq6zOqCxITs/e+XzqgmvsOtofYcS8y4OFJOQRUO263TgksruKFukHCFtlCv171etPtahjXBoSstxE/uoOUn5/Ksr6amtizSm+5SSnEivrXp1Fj1YqSw2UxJX7RGB2PqPzrDFfFHUoAFSU4CQPTFTt1+gefYIEnZkodLZ/wC0BioN/aNKcbKQXSPh47+mPxrv6KzupTZ5fX19t7S9np/4emnWeiuk0PnLn9XNk859Kz+o46BXy1SumWnLcxLQZTEFDa2VcKBA54qR61TT8HI4uPDQpSlSQKUpQFk17pm36x0bddMXVtK4lxjqZVuTu2HuleMjJSoJUPmBXk9r3TNx0drG6aYurSm5dvkFpYVjJHdKuCRykg9z3r18rRj+kg0oiDrPTesI6UJRc4bkKQlDAThxlW5K1LH3lKS9t5GQGu57ADU6lKUBPHgPs065eIu0z4qEKYtMSVKllSgCltTKmQQPU73UDHsSfSvSCtUf6OTSbcPRN81i6mI47cZQiMLDf7ZpDXK07sfdUVIOAf3BnsK2uoBSlKAUpSgFWvVMtUGwTpaDhTbKlDn1xV0rHeoyFOaLuoSopIYUc1Sx5FtGlUVKcU/uauWVTOsoU/8Are0NutB5aUrBKlHBIKjn1qC9edOxp7WLf2dO+3SnQI5z93J7fhWzfRxtqLaG3wEkLLi1Z7Z3GsC6vSLfN1Pb4USS2XEzkuKabHCATyBXldLbKLWvz/R9J8UojPuUV+X+y9woKUWtmKkEJS2E4A+VWPUra7REKbdGQp90YKnOQj3Uaze2tZQCR6cVwvNqZmJ3LRn5e9ZR3dM5Z4IvjF4aXnXq3WRu4JiH9vPnlRQpXGdjYxkDPvWAX64vOX+XAROtM1gMh1pSIWEOrUM+WnByDzjNT9Bcet0Z+B5LbsVwFK2VDhQPoRWHsaUsFru6bnBtOx1pe5ttbqltpPcYST+lelG2pQSzk5X09spt9/BjkXR920/fmoqgkJdSF/B9zB+R5BqYtDwEgIMhJSQcGrBbIcy6Xg3Kc0pJyDlaiSfwPas2trOXBg4ANcPUuO6jrpi8UTIhbYiG3HRyPTmsG1VblSCptoBJP7x7JFZ1t/1QpBNWaXGD+4KTkZ5rkUtaOz5faiFIGl512lznY6WUGIypxBcTuLhAyAlOfWsKterbrAvC0L1BM+ziEpaTHhtgJkbcpQUkH4d3BPeplnWq8Wm4l+HtdbJzubTtX9TirREsllevJuUmzQVSwreorSoDfnuU52nn5V6sbYRWZycFvTynNyUsX2Oq/C9HS9tuGprXFktTGwoSYrZbdjqPqoZ/UYHyq76MYem2wNyXPO2/ChzH3k+hI96uk0zLwttMlYUgEfABhIA9qyCzW5uKz8CAMj0GK5eplGb2Kw1qi4QSk9I26vWpTujJSEI3qYIcSP8AdrGOi3ThN28rUUyKJDhTuZaUn4do/eV7+9SvrGIJFuls4GFtKGPwr74eNQ29rSqLetwMvIb8hYUBg44BFRVc1S47nI/D/M6hTzcX8r+yn6cy9QwOsMa3SXGTDWoOMBtrZsGcEfTBrbUdq180tCRK6oW5xLWFR2VBSvf4k1sHXV8O3slv3OT484u2GL/z/LFKUr0DwxSlKAVr1/SA2yXceggdiQ3JIg3diS8pCN3kthDqCs+wysDP+Kthaj7xH2S46i6Hass9qaS9MfgEtoUsJB2qSs8ngcJNAeVFKUoD008GWnW9PeH2weXKVINzCrircjb5Zcx8A9wNvepkqN/DB/s+6J/4S1/OpIoBSlKAUpSgFUl1itzrfIiPDLbrZSofhVXXE+tGtCbT1Grl4bGkrJcmGAvDclaUAegJzj9ajF+A4J9mvMpQU5Nl9hzgVO3UW2x1agudrmpPkSVFQV/dJGR/GoZ1Xa3rBcLHHVIW5GQ/ltau/wBMV4kK+2/P+n1V3U9/SOXt43+vgkm2IHlgGrqI4UjgVZLM8FbcHIIzWSxwNiSarHkx9lqftrazlTYNU5trIV8LSM++KyFwJKeBVKoJBJOBVu5llFMoBGbab7D8qq7YlPYDmuictKQBkHJ7VddOQHJIKk9gMmsZpzeI6KsjyzsfeDTG31PrVElxO/cPWr9/VipiFIbQfh71jM1t2I6UAZANZOEljZ1/S9SLm5EakNhWBnFUqrYyo/GyhZ9yKqbZJaKAgrBNXZLaVgEECuiPc1wcckkywptiEKG1oAfIVVfZtjZOKuiwE+oxVBMdTsIHrUP9Snkw7URG1wcfdNRVZmlW/wCwyIy1b33VoWjPsogYqTdTO+W08RyQk4FWPplYor1mjahmsqcf81amkA5CeTziqKO1S/6jo6e75fURf6P+CZulkPztSplLRlaGsqz6cY/nUvVHXSBha1S5qhgYCB9c5P8ACpFr2ekj21I+c+JWOfUS/QUpSuk4BSlKAVR3yIufZZ0FtSULkxnGUqV2BUkgE/nVZSgNBf8AkUdS/wD4k0l/9eR//jSt+eflSgI48MH+z7on/hLX86kio38MH+z7on/hLX86kigFKUoBSlKAV8NfaUBH/VTTTk9KLpEbWp1CdjqUDJI9DWufWm3li1Q5SpS1PMykkp2kFPOK3LUMmsS6m6St+ptG3W3LhsKkPR1lpzyxuDgGUnPfviuafTKVinp2VdY4VutrUa86clpcQ2pKgfhHasziODaPWob0Bdspciu5Q/HUUqSe4wcYqTLXN3NIKiAfXFebODhJo9SqxTgjISdyePerfcZCWEn3rvD+WwQc1RGOJUsKPIB7ZpHk2Us8lKXY0OM7Oub6GGUpKtyzgAVx0T1FtDzj0e3S2ZO37w5BA9+R2q4XiNa5URUW4NsPNKGChzBArEVwtLxyERlRGXE/Ah1tIC8d8Ej04qyre6vJd2wz6mSCjV6IiHXUuoT8J3E9gKwSxdTdM36+PwEzFiQFFKd7RAX8xXTGt8OL5kq4XIPRFnCUA8V1Wi6aHiXP7YWIyJW7YhRaT8I+VVVba9mqvrUvOGU3BqREWiYzny1AbhV/sdzS40AtXxYq1o1NYZqPJTPjLUsfdKxzVGgtNLDkV4LbJ4wciocJR5RErYzWGVS5PqDmrRKk4/GqdyafL54H1qyT7kkA4Xjg+vp71g25PER+VaWbWdybaiyXFK2/CrFX7pvbJadO2eDGc88vMoKUJ5UCR6+1RvPckai1ZbtPxElwSJKGyB+9k963Ssdgs1kYSzarcxFSkYBQn4sfU816NXR91a1nm2/EFXY+1c4fNLWhuy2dmG394fE4r3Ue9XeuNcq9FLFiPGk3J6xSlKkgUpSgFKUoBSvmfkaUBA/gOuk+5eHqA3OkrfEGdIixys5KGgQoJz6gFRA9hgdgKnmtPf6N3VwctmpNDyZilOMuJucOOUE7UHDbx3dgN3lfDnuSR61uFQClKUApSlAKUpQCviq+18VQGlHWqxr0X1YuGxBaiXBRlR/Y57gfSuWktQ+aENuZIKc5J7c1Onid0C7qrSYvFtRm6WrLyAkcuIx8SR88c/hWpNmuOyYNyFpcGUuZ4wPQfnmsLq1I6abJRJ4Zn5guOMuBYSMioe1hrPU6Z6m4ssMBZOFp+HZ9Ky3RkorjyUrdVtKM5PGPzqxr0QnVVwW8++4Gm18BBx+tclTVbenfYpWJYy022Jd7hA+0z706gE/EVukE/PNfIGnnFzWgm5htsd17icfM1lcLp5As8kpddfmRVnCPMWct1lR0AG2wYsxbQUApO4EjFbKcnzE7um+HQsitess1xtFtd0+IBvCMgHy/L5UT74FYu7p6JBZaMmUsnb8S1I+8f/LFZ3B0LNWvcq6AjeQQE96u930NFtNtVLuG19W0bELVncfkKolNJ8nfL4dVFrvxMhC+W+2RIwkW64RlOAYG5fc+31q/dJ73OlExN7yWgcBKuUg+v0rN7LpG0pl/b3oLBfUn4EhAwj3Nc49mhWy7OvMtIRvycDgZrKy/Y9r5PNfSqFndFlVMmpYjr3O9h3zUfarvTikhLC1JUeE49fcVdb5JU55isqDbaiO3p8qwl9S5cz7PsMgrdSI7SOVLWeAMVXpaU2Y9Xc4rCWPChp9+9dRJWpHWQqHbW9qVH/3ykj9RxW244rCOiei0aI0JEta0p+2O5kTFD1dXyR+Gdv4VnFet44PDb16KUpQgUpSgFKUoBVt1U44zpi6vNLU24iE8pC0nBSQgkEH0NXKov8V8xcDw7a0fbkmMVW/yd+/bkOLS2U5/xBRTj1zj1oDy3pSlATh4GJ8yJ4k9Pxo0p1lmczLZkoSrAeQIzjgSr3AWhCvqkV6UV476bvE3T+oLffLa4G5kCQiQyTnG5CgQDgg4OMEZ5Ga9a+n2oourNE2fUcKQ1IanxEO+Y0khJXjCwAeRhQUOfagL7SlKAUpSgFKUoBQ0oTigOK0gpIIyD3FaE9fLOnSXVe5SoUdabbIePA7NrIzx8jW+y1AJJJwBya1n6zWaFfb3dIsporZcXuSexBxjIrC6z5eM6emr+Z3L3hAiNVpbgpbQFZWedtSZ03vLT7Cj8PYE4/nUB6igStP6jXbpJUEoXtaWfulGMjPzrNNB3ksvNOJUlSDjenskf51W2tOOovVbKM8kTjdSVtGQwRu9iODWB3Pqm1ZHDFuTc1nYSAkoyMfLntUgWd6Jcbek+aMlOSU1RXLRFjuiVC5Mh8+hV3GfauOP+N8+D16r5x5rZhL3V6yIiolNyHwMZ2hHb61W6d1w/q6SBEjyXmk8F57hCR/OqyL0g0miYpT7TrzJGA1u4796zS2WGy2qK1Ft7KIrDYwEJHH/AH1MrE45E6JdVfL/AGNfshH2RmMlQB9yfWo61denIt13KfAbUDuzWW6vvkOHHVGQnLnZJz3/AO+oB1XfUO3RbL+7btwk5zio6ehyZw9T1PauC837UrbSHyHAEOE7B33DHGPqcVPnhZ6SusQ4uutWMn7e7lcCIocMIPZav8R9PYfWtf8ApZphWo9RxZ02OpcRh5PkMn/pFbhgn5d69A7TIYMBlCFJTsQlBT2wQO1d9SitUfR5nUSlJKUvZXpr7XxNfa2OUUpSgFKUoBSlKAVq/wD0jd9iw+k9ksBkbZtyu4eQztV8bLLa/MVkfCMLcZ4Jyd3AOCRtBXnj4+Nes6r6tx9P2+St236bjGOQUt7PtTitzykKSSVApDKfiIwptWAOSQNdaUpQCt+P6PzqHEvPT17Qc64ld4s7q3YsdbYT/qStuNpH3trilZzyN6fw0HrMejOurj066iWvVFveWlLDgRKaC1JS+wojehYSRuHZWDxlKT6UB6z0qkstxi3ezwrtBWVxJsduQwopKSpC0hSSQeRwRxVXQClKUApSmRQAmvhIoe/esD6kdVdJaHIjXGaH7iofBCYO50/UD7o+tEm+EC56h1fbIWo42l0kvXKYytwtoP8AZNhJO5Xt6D8awfXNkMuMLkwnLrScOJHqn3qK+h+pl6s61X2/zVYfkxVllJOdid6fhH0Ga2GZbCkYIyDwR7iouqUo9rL1WOuSkjVbqXo2PqGEseUA8Pi3p4KiO3NQemLdtOTlw5gBSk4DhOAQPSt1tcaWVGWudCQVRycrbH/Rn3HyqJ9caNt2orf5MlrcoElCgOQa4arJUy7J+D0ba4Xx+ZDyYJo7WD4iraQ9hSslOOwHyrK7NrB9kOLemDcM70qOc1DOodKaj0m+44y0+/DQPiWkcbe+SPwqxq1PKQ4pt1hzcn4VBOc7T/4FdTphPwzljfOryieIvUrfPc3KWBkgK9Pwqqna5W2TJVIISpHwhR4rXA6mkJUoJTtO76mrtCuVwveWY8d191XwBCATk4AFH00V4J/FzZlmr9Y73H96juKsJBPY+n0FdegdJTdR3BMmSha4y1jCCOV/LNXXQ/SqS/MRcL+vzXBwGvvZPp9fpW1vTvRTVjiolSmkfaCkeU3jhof51Xv7vor/AHZdQ7f8tv7IpunWi4uno7cl1lIk7AG0Y4bH+dX3W0SZcdF3WNbpj0OelkvxXmllKkOI5H19eKvDgwc1Q3aUmJZ50pZAS1HcUT/2TXVTWoLEcd1krJdzKLw1dUFdRNGg3Py273BPkzEJ43kfvgfP+OaljIrzX6f6gullvb1ys05yHKW4t1tbasd1E4PuOa2z6J9fbbqhbVk1Stm3Xf7qHCQlp8/I9gT7VaUO76ome5wyds0rik5AI/SuWRWRYUpSgFKUoDBevmtF9PukOodVsp3SYkcIjAKAPnOLS2gjIIO1SwrGDwk15TzpT82a/NlOeY/IcU66vAG5SjknA47mtpP6QXqem+apidN7W8lcGyOCTcFJIUHJZQQlP3cjy0LVnCiCXCCMorVWgFKUoBSlKA3e/o/OqztxtjvS+7uteZb21P2ghtW9bRUpTqFEDb8JOQScnfjnFbdV476dvNz09fId7s8tyHPhuh1h5tWFIUP/ABj8a9Q9DdYdEak6e2vVrl+t0JMqOlUmOp744zwH7RoggKylWRnACgAoZBBoCRaVCWrPEv06syXG4D0u7vJ7CO1hB/FRH8KiTVfiw1FLC2tPWKJb0EYDr7hdWPngAD9asoMjTcN91plpTrriG0JGSpasAD5moo6g9ftB6VdXDYmKvM9PHkQxuCT81nCf1rTDV/VHXGqFqF21FMeQvjykK2Ix7YFYylwNJOFbln7yqsoJeRyT/wBQvEzqm8xFwLFGZsra8hTyF73MfI+lQu/cXUoenSXnJEt7OVrVlRz3Oasja9zmfnXVc5GVpbSScfpV088DCR+hmoTaOolokqXhDj3kPHPBCxj+OK3khLCkjmvN2xylRZLbqD8bawtJ+YOf5V6B6BuqLtpa13NCsh+OlR+uMH+FZz55JMkkNpWkpUAQfSo71bpNbanJdsRvT3Wx6j5ipHKgU8VSPjtjuKwsrjYsZpVbKt7EgaUzHdKmpLW9ByFIWn9MViU3QWn3FqeRHQV5+Hj+VT3qnSkW7pU9GxHl4yCPur+oqKZUOdHmORUtKdcbVtWG/iwfwrz7K7KvHg9em2u7z5MRR0908Dl6EyvI5JT3q8WTT1qt5DdvgtIWVcbEckmru1bru+tKEwXyVHglOKk3QOkGrUymdPQHZiuQDyG/kKVwsteaWusppXdi07NC6URamUTpzaTLIy23jIaH+dZYT70UckmupSu49K9OquMFkTxrLZWy7pHBw1HPiEvf9R9Kbs6lYS7ISI7f1V/5VIqj+la4eMy+YasenG1ffK5Tqc+gwE5/I1snwZkA2pxLLrZScYA4FV8xf7Qup4V33D0rH2XS2534zxV33hTWc8GiYwmXpP191NpLy7fdN94tieNi1/tED/CT/CtkdB9cNBaqcTGRchbpqsAR5g8sqPyV90/nWgIXsUcntXb5pdTwSlaeUqBwUmpeS8kZ9j1FbWlxAWhQUkjIIOQa5jtXndoDrNrzRziWod2XJjJPMaVlaD+PcVsNoTxSacuCW2NUW2Ra3iAC8yfNaJ9/Qj9ap2fYabF1H3iA6mW/pV02naklELnOAxrUwWi4l6WpCi2lQBThA2lSjuHwpIBKikG7WjqJom6QHZ8TU9s+zMtF11x18NhtCRlSlFWMAAEkntXnX4puq73VbqW9NjL22C174dobStza40FnMgpXjat3gn4UkJS2k5KMmjTXkki+7T5l1uku6XGQuTNmPrkSHlnKnHFqKlKPzJJNU1KUApSlAKUpQCq+zXBUCSFEqUyr76AeD86oKUBnH2hK0JcQcoUMgj1FcFrIJ5rGLbPXFUELJUyTyn2+YrIA4l5AUghSVcg1dPQVqAlKN2crPfHpXFSifhFW0OOxiSnKkHun1FVMeSy6nIVz+tEwVoX5aNxI4qhUoqXuJyfWuTzhJODwPSukEk/Kmgqojm1wc9q3J8Kt9/rLp2qCpeXLfJ2f9hQyP4GtLgdpyKn/AMHt8MbV8+zLWQibG3pBPdaD/ko1PlA26Zd4xXB9ftiqZtwkD0rsb+N0BRwPUnsBWZJFHiV6mHp7o0sW1af6+uaS1E92U/vOY9wM4+eK06s3UDWlncedt2o5TLj6tzqjhW5XfJyDVx6+axXrjqld7s26pcJp0x4QzwlpJwMfXFYIOTU6QSZF66dTGHozrmovPbZcStTZYQN4B5BIHrW8nTrVls11om36mtSk+XIbAeaB5ZdHCkn8f0IrzVaTn51PXg216nTWu16RnSNtsvhAbCj8LcgcAj2yMA/SgNynDiqcnmqh9CkqKSMEHFdJT3+VWQOpzjitJPEjejeurdwKFbm4baI6MHgYyT/Gt0L7KTCtEyas4SyypZP0FeeuoJzlzv8AcJylZVIkLWSfbPFWb9BFGDyciq2E/wABB9BgfMVQKOcDtjgGubZ2qznt2NQC4vY+8PyrglR7jvXxDm4YV3HeuL6ktfEpYQkepNAdj6StrzU8qSOR7iutt0YBzxj0qj/rBSztjJyn++e1WO93UuBUWMv4Ozix+98h8v4/TvG4Cqv2oXVoXCgOqbbUCl5xCseYDwU8fu+/v9O+N0pVW9ApSlQBSlKAUpSgFKUoBVZbZyoqtqhubUeR7fSqOlAZO24l9G5tQUDxwa+hltKitI+P3rHYkl2Mvc0rv3Sexq9xJ7MhGCoIX/dPr9KtoKpPsa+ZPbH0pn1Hr2oTxwaA+bqzbo1e1WLqLZbiV4QmQG1/7quP8qwgHB+Rqst7im30rQSFNqCkke4OaIHpG3hSspOUnkfMelYh1w1EdMdLrzOZcKJb7JixiDzvWMZH0zV16a3RN70HZLruClPREbzn95Pwn+FRn4mPOuy4FlayWo/7ZwJ9VHt+mKr7JNKX47kN0supIPcH3+dcQoelTX1O6Zvx+m6r+0gmXDUFqQByWicH8s5qEW0ubMlPHehBVNkBO4HtXO3uS0XiLIgKWJTLiXGynuCDnNUofCWlcHP0qQtIWMQbUxKkNnz5SPM3EdknsBRA3s6f6jb1foq2X5CgXX2EiSB+66BhY/PNXdYxxUA+F69yoNxnWeRn+rZJCmyeyHP++p/eBCiK0QI68Qd3Fm6VXZ4K2reb8lH1Ucf51os3kIAUefn71tH41byGNPWiwpXhcp8uqAP7qR/mRWrgIBwfzqPY9HPjBzyKDdkHFcRkkY7VyQeeDyeDQHYkqAH6VSPMFbhdkPFaB6E4ArlMlx4re51eCeyRyTWPXC5Py8o/s2uPgB7/AFPrUNgqLrcw4gxovwt9lK7bvkPlVppSqgUpSgFKUoBSlKAUpSgFKUoBSlKAUpSgK+HcnGglDqfMQOB7irrGlMvj9ksbvY8Gsbr6lSkqCkkgjsQanQZMrJ4qqhqO8fKsbYuT7aQleHB7nv8AnVxh3WN3cKmiO+QTn8qaDdfwm34S+ncq1Ory5bZJKRn9xYBH65rIIdt/r+9zrpKTuaDh2g+oHAFQB4V9SNNa0etDEpst3VjyDlWMLHII9zzW2MWC1b4QjNjG0c/M1IIs6wTWrT001BJdSNohraQD2Kl/CB+taVx+Gvi9q2j8Y11TB0fbrC0ra5cZXmuAf3Ecj9QK1ebHGKqCmkj0wOeK2S6DqtOsOn7caa2j7fa1mM57qR3SfyOPwrW2YMOpFSJ4dr4u2a6ct6ndjNyb2d+N47GpQNpLbpZFibCoSv2Sxk+4NSlZ5LkyA0p5O19ICXB7msM08HpNsYS+rcM8n5e1duseoemtAzY7l+nNMNPMrJAOVJWlJKAUjnkjH41ZMGsXi0vibt1dehIXuZtjAYHsFnlX8BUTjtn0r7qjUzN21Fcrs+4t1yZJU4SBk4J47/LFWJ68OkEMtpRnIyTk/wDj86jQXp51DDe9xxKE+5q0T7sFfDECk443n1+gq1vOuPL3urUtXuTXCo0HJa1LWVrUVKJySa40pUAUpSgFKUoBSlKAUpSgFKUoBSlKAUpSgFKUoBSlKAUpSgFb9+FD/Z70z9Jf/wC29SlARJ41f+c9g/6ov+NQC13/ABpSgOmZ/airr05/59Wj/rKaUoDcTVH/ALEdU/8ABZ3/AOFdaFUpUsClKVAFKUoBSlKAUpSgFKUoBSlKAUpSgP/Z" alt="Sreejith Sreekumar" />
+      </div>
+      <div class="hero-text-block">
+    <h1 class="hero-name" id="heroName">SREEJITH<br>SREEKUMAR</h1>
+    <p class="hero-sub">FINTECH · ERP · QA ENGINEERING · MARINE SYSTEMS</p>
+    <div class="hero-tags">
+      <span class="hero-tag">7+ YEARS EXP</span>
+      <span class="hero-tag">DOHA, QATAR</span>
+      <span class="hero-tag">AGILE / SCRUM</span>
+      <span class="hero-tag">AUTOMATION QA</span>
+      <span class="hero-tag">FINTECH</span>
+    </div>
+    <div class="hero-cta">
+      <button class="btn-primary" onclick="jumpTo('experience')">VIEW EXPERIENCE</button>
+      <button class="btn-outline" onclick="window.location.href='mailto:nandukallelil@gmail.com'">CONTACT ME</button>
+    </div>
+    <div class="hero-info">
+      <span>📧 <a href="mailto:nandukallelil@gmail.com">nandukallelil@gmail.com</a></span>
+      <span>📱 +974-30410095</span>
+      <span>📍 Doha, Qatar</span>
+    </div>
+      </div><!-- end hero-text-block -->
+    </div><!-- end hero-layout -->
+  </div>
+
+  <div class="scroll-cue">
+    <div class="scroll-mouse"><div class="scroll-wheel"></div></div>
+    <div class="scroll-txt">SCROLL</div>
+  </div>
+</section>
+
+<!-- ===== STATS ===== -->
+<div class="stats-bar" id="stats-bar">
+  <div class="stat-item reveal">
+    <span class="stat-num" data-count="7">0+</span>
+    <div class="stat-label">Years Experience</div>
+    <div class="stat-bar-fill" data-pct="70"></div>
+  </div>
+  <div class="stat-item reveal" style="transition-delay:.1s">
+    <span class="stat-num" data-count="7">0+</span>
+    <div class="stat-label">Companies</div>
+    <div class="stat-bar-fill" data-pct="70"></div>
+  </div>
+  <div class="stat-item reveal" style="transition-delay:.2s">
+    <span class="stat-num" data-count="12">0+</span>
+    <div class="stat-label">Major Projects</div>
+    <div class="stat-bar-fill" data-pct="90"></div>
+  </div>
+  <div class="stat-item reveal" style="transition-delay:.3s">
+    <span class="stat-num" data-count="4">0+</span>
+    <div class="stat-label">Certifications</div>
+    <div class="stat-bar-fill" data-pct="40"></div>
+  </div>
+  <div class="stat-item reveal" style="transition-delay:.4s">
+    <span class="stat-num" data-count="30">0+</span>
+    <div class="stat-label">% Faster QA Cycles</div>
+    <div class="stat-bar-fill" data-pct="30"></div>
+  </div>
+</div>
+
+<!-- ===== BRIDGE 1: Hero → Experience ===== -->
+<div class="section-bridge" id="bridge-exp">
+  <div class="divider-line"></div>
+  <div class="fall-zone" id="fz-exp"></div>
+  <div class="bridge-label">// LOADING EXPERIENCE DATA //</div>
+</div>
+
+<!-- ==================== EXPERIENCE ==================== -->
+<section id="experience">
+  <div class="section-wrap">
+    <p class="sec-label reveal">// WORK HISTORY</p>
+    <h2 class="sec-title reveal" id="title-exp">Experience</h2>
+
+    <div class="timeline">
+
+      <div class="exp-card reveal-left">
+        <div class="tl-dot"></div>
+        <div class="card-shine"></div>
+        <div class="exp-top">
+          <div>
+            <div class="exp-co">⚡ Edaa – QCSD</div>
+            <div class="exp-role">Application Support Engineer</div>
+            <div class="exp-type">Qatar Central Securities Depository · Contract</div>
+          </div>
+          <span class="exp-period">AUG 2025 – PRESENT</span>
+        </div>
+        <ul class="exp-bullets">
+          <li>Application support for Qatar's financial market infrastructure ensuring high availability and system reliability.</li>
+          <li>Supporting Financial Service Application, <strong>Oracle Database</strong>, and <strong>Equator by IBM</strong>.</li>
+          <li>End-to-end testing of <strong>CBQ iPay</strong> payment gateway: functional, regression, security, UAT.</li>
+          <li>Supporting <strong>Microsoft Dynamics 365 ERP</strong>: issue resolution, troubleshooting, and process optimization.</li>
+          <li>MFA resets, NTP server config, Cisco VoIP, ZK BioTime biometric system administration.</li>
+          <li>Phishing analysis and IP blocking on ISP servers to mitigate cybersecurity threats.</li>
+          <li>Agile stand-ups, sprint retrospectives, and continuous delivery momentum.</li>
+        </ul>
+        <div class="exp-tags">
+          <span class="exp-tag-chip">Oracle DB</span><span class="exp-tag-chip">MS Dynamics 365</span><span class="exp-tag-chip">CBQ iPay</span><span class="exp-tag-chip">Agile</span><span class="exp-tag-chip">Cybersecurity</span>
+        </div>
+      </div>
+
+      <div class="exp-card reveal-right" style="transition-delay:.1s">
+        <div class="tl-dot"></div>
+        <div class="card-shine"></div>
+        <div class="exp-top">
+          <div>
+            <div class="exp-co">🏥 Nabedh Medical Center</div>
+            <div class="exp-role">IT Manager – ERP & IT Support</div>
+            <div class="exp-type">Full-time</div>
+          </div>
+          <span class="exp-period">FEB 2025 – AUG 2025</span>
+        </div>
+        <ul class="exp-bullets">
+          <li>End-to-end testing of <strong>Dibsy</strong> and <strong>SkipCash</strong> payment gateway integrations.</li>
+          <li>Full IT infrastructure: server maintenance, network, IP phones, uptime monitoring.</li>
+          <li>Active Directory (Azure AD), Outlook/Exchange administration, corporate email management.</li>
+          <li>Led defect triage and managed critical ERP escalations ensuring minimal downtime.</li>
+          <li>Security testing and penetration testing; ISO audit readiness documentation.</li>
+        </ul>
+        <div class="exp-tags">
+          <span class="exp-tag-chip">Dibsy</span><span class="exp-tag-chip">SkipCash</span><span class="exp-tag-chip">Azure AD</span><span class="exp-tag-chip">Pen Testing</span><span class="exp-tag-chip">ISO Audit</span>
+        </div>
+      </div>
+
+      <div class="exp-card reveal-left" style="transition-delay:.2s">
+        <div class="tl-dot"></div>
+        <div class="card-shine"></div>
+        <div class="exp-top">
+          <div>
+            <div class="exp-co">🧪 Assyst International</div>
+            <div class="exp-role">Senior QA Engineer – Agile & UAT Lead</div>
+          </div>
+          <span class="exp-period">JUN 2023 – FEB 2025</span>
+        </div>
+        <ul class="exp-bullets">
+          <li>Led UAT cycles for <strong>World Bank, ADB, CIC</strong> with business teams and regulatory stakeholders.</li>
+          <li>Automated ERP regression testing with <strong>Selenium + JMeter</strong>; reduced manual effort significantly.</li>
+          <li>Implemented Agile QA, reducing test cycle by <strong>30%</strong> via sprint-based workflows.</li>
+          <li>Data validation, UI testing, performance testing, and server caching verification for financial modules.</li>
+        </ul>
+        <div class="exp-tags">
+          <span class="exp-tag-chip">Selenium</span><span class="exp-tag-chip">JMeter</span><span class="exp-tag-chip">World Bank</span><span class="exp-tag-chip">ADB</span><span class="exp-tag-chip">UAT Lead</span>
+        </div>
+      </div>
+
+      <div class="exp-card reveal-left" style="transition-delay:.3s">
+        <div class="tl-dot"></div>
+        <div class="card-shine"></div>
+        <div class="exp-top">
+          <div>
+            <div class="exp-co">🏢 Lana Technologies – Bahrain</div>
+            <div class="exp-role">Project Manager / Branch Head</div>
+            <div class="exp-type">Onsite · Sales · Lead · Support · Testing & Integration · Bahrain</div>
+          </div>
+          <span class="exp-period">SEP 2022 – JAN 2023</span>
+        </div>
+        <ul class="exp-bullets">
+          <li>Managed branch operations as <strong>Project Manager & Branch Head</strong> for Lana Technologies' onsite deployment in Bahrain.</li>
+          <li>Led end-to-end <strong>ZK POS system rollout</strong>: sales, client lead generation, and on-ground support across multiple outlets.</li>
+          <li>Oversaw <strong>payment gateway testing and integration</strong> including functional, regression, and end-to-end transaction validation.</li>
+          <li>Conducted <strong>VAT testing on POS terminals</strong> ensuring compliance with Bahrain's VAT regulations and fiscal requirements.</li>
+          <li>Managed CI/CD pipeline for POS app builds and releases; used <strong>Jenkins + GitLab</strong> for automated deployment cycles.</li>
+          <li>Coordinated cross-functional teams for system testing, user training, and post-deployment support.</li>
+        </ul>
+        <div class="exp-tags">
+          <span class="exp-tag-chip">ZK POS</span><span class="exp-tag-chip">Payment Gateway</span><span class="exp-tag-chip">VAT Testing</span><span class="exp-tag-chip">Jenkins</span><span class="exp-tag-chip">GitLab</span><span class="exp-tag-chip">CI/CD</span><span class="exp-tag-chip">Bahrain</span>
+        </div>
+      </div>
+
+      <div class="exp-card reveal-right" style="transition-delay:.35s">
+        <div class="tl-dot"></div>
+        <div class="card-shine"></div>
+        <div class="exp-top">
+          <div>
+            <div class="exp-co">🚀 Lana Technologies</div>
+            <div class="exp-role">Test Engineer / Project Manager</div>
+          </div>
+          <span class="exp-period">JUN 2021 – SEP 2022</span>
+        </div>
+        <ul class="exp-bullets">
+          <li>Integration testing for finance, inventory, and HR modules across ERP and mobile platforms.</li>
+          <li>Automated test scenarios, reducing manual effort by <strong>45%</strong>; CI/CD via Jenkins + GitLab.</li>
+          <li>Cross-border ERP project management: scheduling, resource allocation, executive reporting.</li>
+        </ul>
+        <div class="exp-tags">
+          <span class="exp-tag-chip">Jenkins</span><span class="exp-tag-chip">GitLab</span><span class="exp-tag-chip">CI/CD</span><span class="exp-tag-chip">ERP</span><span class="exp-tag-chip">PM</span>
+        </div>
+      </div>
+
+      <div class="exp-card reveal-right" style="transition-delay:.4s">
+        <div class="tl-dot"></div>
+        <div class="card-shine"></div>
+        <div class="exp-top">
+          <div>
+            <div class="exp-co">⚓ Digital Marine Systems</div>
+            <div class="exp-role">Technical Support Engineer</div>
+            <div class="exp-type">Marine & Offshore Systems · Dubai</div>
+          </div>
+          <span class="exp-period">2019 – 2020</span>
+        </div>
+        <ul class="exp-bullets">
+          <li>Onshore/offshore IT support: Honeywell safety systems, fire detection, CCTV integration.</li>
+          <li>Cisco VoIP, Inatlio wireless, satellite internet, shipboard LAN cabling and commissioning.</li>
+        </ul>
+        <div class="exp-tags">
+          <span class="exp-tag-chip">Honeywell</span><span class="exp-tag-chip">Cisco VoIP</span><span class="exp-tag-chip">Marine IT</span><span class="exp-tag-chip">Offshore</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== BRIDGE 2: Experience → Skills ===== -->
+<div class="section-bridge" id="bridge-skills">
+  <div class="divider-line"></div>
+  <div class="fall-zone" id="fz-skills"></div>
+  <div class="bridge-label">// COMPILING SKILL MATRIX //</div>
+</div>
+
+<!-- ==================== SKILLS ==================== -->
+<section id="skills">
+  <div class="section-wrap">
+    <p class="sec-label reveal">// TECHNICAL ARSENAL</p>
+    <h2 class="sec-title reveal" id="title-skills">Skills</h2>
+
+    <!-- Skill bars -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem;margin-bottom:3rem;">
+      <div class="reveal">
+        <div class="skill-bar-wrap"><div class="skill-bar-label"><span>QA & Test Engineering</span><span>95%</span></div><div class="skill-bar-track"><div class="skill-bar-fill glow" data-w="95"></div></div></div>
+        <div class="skill-bar-wrap"><div class="skill-bar-label"><span>Application Support</span><span>90%</span></div><div class="skill-bar-track"><div class="skill-bar-fill glow" data-w="90"></div></div></div>
+        <div class="skill-bar-wrap"><div class="skill-bar-label"><span>Payment Gateway Testing</span><span>88%</span></div><div class="skill-bar-track"><div class="skill-bar-fill glow" data-w="88"></div></div></div>
+        <div class="skill-bar-wrap"><div class="skill-bar-label"><span>Automation (Selenium/JMeter)</span><span>82%</span></div><div class="skill-bar-track"><div class="skill-bar-fill glow" data-w="82"></div></div></div>
+      </div>
+      <div class="reveal" style="transition-delay:.1s">
+        <div class="skill-bar-wrap"><div class="skill-bar-label"><span>MS Dynamics 365 ERP</span><span>85%</span></div><div class="skill-bar-track"><div class="skill-bar-fill glow" data-w="85"></div></div></div>
+        <div class="skill-bar-wrap"><div class="skill-bar-label"><span>IT Infrastructure & Networking</span><span>80%</span></div><div class="skill-bar-track"><div class="skill-bar-fill glow" data-w="80"></div></div></div>
+        <div class="skill-bar-wrap"><div class="skill-bar-label"><span>Security / Pen Testing</span><span>75%</span></div><div class="skill-bar-track"><div class="skill-bar-fill glow" data-w="75"></div></div></div>
+        <div class="skill-bar-wrap"><div class="skill-bar-label"><span>Project Management (Agile)</span><span>88%</span></div><div class="skill-bar-track"><div class="skill-bar-fill glow" data-w="88"></div></div></div>
+        <div class="skill-bar-wrap"><div class="skill-bar-label"><span>IT Support & Infrastructure</span><span>85%</span></div><div class="skill-bar-track"><div class="skill-bar-fill glow" data-w="85"></div></div></div>
+        <div class="skill-bar-wrap"><div class="skill-bar-label"><span>POS & VAT Testing</span><span>90%</span></div><div class="skill-bar-track"><div class="skill-bar-fill glow" data-w="90"></div></div></div>
+      </div>
+    </div>
+
+    <div class="skills-grid">
+      <div class="skill-cat reveal-pop"><div class="skill-cat-icon">🖥️</div><div class="skill-cat-title">APP SUPPORT</div><div class="chips"><span class="chip">Financial Apps</span><span class="chip">MS Dynamics 365</span><span class="chip">Oracle DB</span><span class="chip">Equator IBM</span><span class="chip">POS Integration</span></div></div>
+      <div class="skill-cat reveal-pop" style="transition-delay:.07s"><div class="skill-cat-icon">🧪</div><div class="skill-cat-title">QA & TESTING</div><div class="chips"><span class="chip">Manual Testing</span><span class="chip">Automation</span><span class="chip">UAT</span><span class="chip">Regression</span><span class="chip">API Testing</span><span class="chip">Performance</span><span class="chip">Security</span></div></div>
+      <div class="skill-cat reveal-pop" style="transition-delay:.14s"><div class="skill-cat-icon">💳</div><div class="skill-cat-title">PAYMENT GATEWAYS</div><div class="chips"><span class="chip">CBQ iPay</span><span class="chip">Dibsy</span><span class="chip">SkipCash</span><span class="chip">Functional UAT</span><span class="chip">Security Test</span></div></div>
+      <div class="skill-cat reveal-pop" style="transition-delay:.21s"><div class="skill-cat-icon">⚙️</div><div class="skill-cat-title">CI/CD & TOOLS</div><div class="chips"><span class="chip">Selenium</span><span class="chip">JMeter</span><span class="chip">Jenkins</span><span class="chip">GitLab</span><span class="chip">Defect Mgmt</span></div></div>
+      <div class="skill-cat reveal-pop" style="transition-delay:.28s"><div class="skill-cat-icon">🌐</div><div class="skill-cat-title">IT INFRASTRUCTURE</div><div class="chips"><span class="chip">Network Admin</span><span class="chip">VLAN</span><span class="chip">Active Directory</span><span class="chip">MFA</span><span class="chip">NTP Server</span><span class="chip">CCTV</span></div></div>
+      <div class="skill-cat reveal-pop" style="transition-delay:.35s"><div class="skill-cat-icon">⚓</div><div class="skill-cat-title">MARINE SYSTEMS</div><div class="chips"><span class="chip">Honeywell Safety</span><span class="chip">Fire Systems</span><span class="chip">Cisco VoIP</span><span class="chip">Inatlio</span><span class="chip">Offshore IT</span></div></div>
+      <div class="skill-cat reveal-pop" style="transition-delay:.42s"><div class="skill-cat-icon">🔐</div><div class="skill-cat-title">BIOMETRIC / ACCESS</div><div class="chips"><span class="chip">ZK BioTime</span><span class="chip">ZKTECO</span><span class="chip">Access Control</span></div></div>
+      <div class="skill-cat reveal-pop" style="transition-delay:.49s"><div class="skill-cat-icon">📋</div><div class="skill-cat-title">PROJECT MGMT & COORDINATION</div><div class="chips"><span class="chip">Agile/Scrum</span><span class="chip">Sprint Planning</span><span class="chip">Risk Mgmt</span><span class="chip">Stakeholder Eng.</span><span class="chip">Resource Planning</span><span class="chip">Budget Tracking</span><span class="chip">Branch Management</span><span class="chip">Cross-team Coordination</span><span class="chip">UAT Sign-off</span><span class="chip">Vendor Mgmt</span></div></div>
+      <div class="skill-cat reveal-pop" style="transition-delay:.56s"><div class="skill-cat-icon">🛠️</div><div class="skill-cat-title">IT SUPPORT</div><div class="chips"><span class="chip">Helpdesk L1/L2</span><span class="chip">Hardware Troubleshoot</span><span class="chip">Remote Support</span><span class="chip">OS Imaging</span><span class="chip">Patch Management</span><span class="chip">Ticket Mgmt</span><span class="chip">SLA Compliance</span><span class="chip">User Onboarding</span><span class="chip">AV Systems</span><span class="chip">NTP / Time Sync</span></div></div>
+      <div class="skill-cat reveal-pop" style="transition-delay:.63s"><div class="skill-cat-icon">🧩</div><div class="skill-cat-title">TESTING SPECIALISMS</div><div class="chips"><span class="chip">Functional Testing</span><span class="chip">Integration Testing</span><span class="chip">System Testing</span><span class="chip">UAT</span><span class="chip">Regression</span><span class="chip">Smoke Testing</span><span class="chip">Exploratory</span><span class="chip">VAT Compliance</span><span class="chip">POS Testing</span><span class="chip">ERP Testing</span><span class="chip">Test Plans</span><span class="chip">Bug Life Cycle</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BRIDGE 3: Skills → Projects ===== -->
+<div class="section-bridge" id="bridge-projects">
+  <div class="divider-line"></div>
+  <div class="fall-zone" id="fz-projects"></div>
+  <div class="bridge-label">// INITIALIZING PROJECT LOGS //</div>
+</div>
+
+<!-- ==================== PROJECTS ==================== -->
+<section id="projects">
+  <div class="section-wrap">
+    <p class="sec-label reveal">// KEY DEPLOYMENTS</p>
+    <h2 class="sec-title reveal" id="title-projects">Projects</h2>
+
+    <div class="proj-grid">
+      <div class="proj-card reveal"><div class="proj-icon-wrap">💳</div><div class="proj-name">CBQ iPay Payment Gateway</div><div class="proj-org">Edaa-QCSD · 2025–Present</div><div class="proj-desc">End-to-end payment gateway testing: functional, regression, security, UAT. Validated payment flows and post-deployment stability for Qatar's financial market infrastructure.</div><div class="proj-footer"><span class="proj-badge">UAT</span><span class="proj-badge">Security</span><span class="proj-badge">FinTech</span></div></div>
+
+      <div class="proj-card reveal" style="transition-delay:.07s"><div class="proj-icon-wrap">🌐</div><div class="proj-name">World Bank Financial Reporting</div><div class="proj-org">Assyst International · 2023–2025</div><div class="proj-desc">Manual and automation testing across financial reporting modules. Data validation, UI testing, performance testing, and server caching verification for World Bank systems.</div><div class="proj-footer"><span class="proj-badge">Selenium</span><span class="proj-badge">JMeter</span><span class="proj-badge">Automation</span></div></div>
+
+      <div class="proj-card reveal" style="transition-delay:.14s"><div class="proj-icon-wrap">🏦</div><div class="proj-name">ADB Fund Calculation Platform</div><div class="proj-org">Assyst International · 2023–2025</div><div class="proj-desc">Integration testing for complex formula and calculation methods on ADB's web data computation platform. Regression testing for each integration update.</div><div class="proj-footer"><span class="proj-badge">Integration</span><span class="proj-badge">Performance</span></div></div>
+
+      <div class="proj-card reveal" style="transition-delay:.21s"><div class="proj-icon-wrap">💊</div><div class="proj-name">Dibsy & SkipCash Integration</div><div class="proj-org">Nabedh Medical Center · 2025</div><div class="proj-desc">Full lifecycle testing for two payment gateway integrations in a medical hospitality application covering HR, customer service modules, and all payment providers.</div><div class="proj-footer"><span class="proj-badge">Dibsy</span><span class="proj-badge">SkipCash</span><span class="proj-badge">Functional</span></div></div>
+
+      <div class="proj-card reveal" style="transition-delay:.28s"><div class="proj-icon-wrap">🖥️</div><div class="proj-name">ZK POS – Windows, Android & iOS</div><div class="proj-org">Lana Technologies · 2021–2023</div><div class="proj-desc">QA for ZK POS cross-platform app across Windows, Android, and iOS: UI design review, API testing, performance benchmarking, functional and regression testing prior to every production release.</div><div class="proj-footer"><span class="proj-badge">ZK POS</span><span class="proj-badge">API Testing</span><span class="proj-badge">Windows</span><span class="proj-badge">Android</span><span class="proj-badge">iOS</span><span class="proj-badge">Cross-platform</span></div></div>
+
+      <div class="proj-card reveal" style="transition-delay:.35s"><div class="proj-icon-wrap">🏢</div><div class="proj-name">ZK POS Rollout & Payment Gateway – Bahrain</div><div class="proj-org">Lana Technologies Bahrain · Sep 2022 – Jan 2023</div><div class="proj-desc">Led full on-site ZK POS deployment across Bahrain as Branch Head & Project Manager. Managed payment gateway integration testing, VAT compliance testing on POS terminals, client sales, lead management, CI/CD pipeline releases via Jenkins + GitLab, and post-deployment support for all outlets.</div><div class="proj-footer"><span class="proj-badge">ZK POS</span><span class="proj-badge">Payment Gateway</span><span class="proj-badge">VAT Testing</span><span class="proj-badge">Jenkins</span><span class="proj-badge">GitLab</span><span class="proj-badge">Bahrain</span></div></div>
+
+      <div class="proj-card reveal" style="transition-delay:.35s"><div class="proj-icon-wrap">🔏</div><div class="proj-name">ZK BioTime Biometric System</div><div class="proj-org">Nabedh Medical Center · 2025</div><div class="proj-desc">Administration and support of biometric attendance system and underlying database. User provisioning, attendance reporting, continuous system availability.</div><div class="proj-footer"><span class="proj-badge">Biometric</span><span class="proj-badge">HR Systems</span></div></div>
+
+      <div class="proj-card reveal" style="transition-delay:.42s"><div class="proj-icon-wrap">⚓</div><div class="proj-name">Offshore Marine IT</div><div class="proj-org">Digital Marine Systems · 2019–2020</div><div class="proj-desc">IT support for vessels: Honeywell safety/fire systems, CCTV, Cisco VoIP, satellite connectivity, full shipboard LAN infrastructure commissioning.</div><div class="proj-footer"><span class="proj-badge">Honeywell</span><span class="proj-badge">Marine</span><span class="proj-badge">Offshore</span></div></div>
+
+      <div class="proj-card reveal" style="transition-delay:.49s"><div class="proj-icon-wrap">🏛️</div><div class="proj-name">CIC Regulatory Compliance</div><div class="proj-org">Assyst International · 2023–2025</div><div class="proj-desc">Regression, functional, and integration test suites for Credit Information Corporation ensuring data accuracy, system stability, and regulatory compliance.</div><div class="proj-footer"><span class="proj-badge">Compliance</span><span class="proj-badge">Regression</span></div></div>
+
+      <div class="proj-card reveal" style="transition-delay:.56s"><div class="proj-icon-wrap">🕐</div><div class="proj-name">NTP Server & WiFi Clock Configuration</div><div class="proj-org">Edaa – QCSD · 2025–Present</div><div class="proj-desc">Installed and configured NTP server for time synchronization across the Edaa network infrastructure. Set up and configured WiFi-enabled clock systems across office locations, ensuring accurate time display and network time protocol compliance.</div><div class="proj-footer"><span class="proj-badge">NTP Server</span><span class="proj-badge">WiFi Clock</span><span class="proj-badge">Network Config</span><span class="proj-badge">Infrastructure</span></div></div>
+
+      <div class="proj-card reveal" style="transition-delay:.63s"><div class="proj-icon-wrap">📺</div><div class="proj-name">AV System & Tablet Configuration</div><div class="proj-org">Edaa – QCSD · 2025–Present</div><div class="proj-desc">Deployed and configured Audio-Visual systems across Edaa premises including display units, conferencing setups, and room management tablets. Handled full end-to-end tablet provisioning, app configuration, network enrollment, and integration with existing AV infrastructure.</div><div class="proj-footer"><span class="proj-badge">AV Systems</span><span class="proj-badge">Tablet Config</span><span class="proj-badge">MDM</span><span class="proj-badge">Conferencing</span></div></div>
+
+      <div class="proj-card reveal" style="transition-delay:.70s"><div class="proj-icon-wrap">📞</div><div class="proj-name">Cisco VoIP Phone System – Config & Directory</div><div class="proj-org">Edaa – QCSD · 2025–Present</div><div class="proj-desc">Configured and maintained Cisco IP phone infrastructure: full telephone directory setup, call forwarding rules, extension assignments, and dial-plan updates. Managed ongoing configuration changes, user provisioning, and troubleshooting for the entire VoIP telephony environment.</div><div class="proj-footer"><span class="proj-badge">Cisco VoIP</span><span class="proj-badge">Call Forwarding</span><span class="proj-badge">Directory Mgmt</span><span class="proj-badge">Telephony</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BRIDGE 4: Projects → Education ===== -->
+<div class="section-bridge" id="bridge-edu">
+  <div class="divider-line"></div>
+  <div class="fall-zone" id="fz-edu"></div>
+  <div class="bridge-label">// ACCESSING ACADEMIC RECORDS //</div>
+</div>
+
+<!-- ==================== EDUCATION ==================== -->
+<section id="education">
+  <div class="section-wrap">
+    <p class="sec-label reveal">// ACADEMIC FOUNDATION</p>
+    <h2 class="sec-title reveal" id="title-edu">Education</h2>
+    <div class="edu-grid">
+      <div class="edu-card reveal-left">
+        <div style="font-size:2.5rem;margin-bottom:1rem">🎓</div>
+        <div class="edu-degree">Bachelor of Engineering</div>
+        <div class="edu-school">Mechanical Engineering</div>
+        <div style="color:rgba(200,220,255,.55);font-size:.88rem;margin:.3rem 0">Karpagam University, Coimbatore</div>
+        <div class="edu-period">2014 – 2018</div>
+      </div>
+      <div class="edu-card reveal-right" style="transition-delay:.1s">
+        <div style="font-size:2.5rem;margin-bottom:1rem">📜</div>
+        <div class="edu-degree">Online Certificate Program</div>
+        <div class="edu-school">Banking & Finance</div>
+        <div style="color:rgba(200,220,255,.55);font-size:.88rem;margin:.3rem 0">TimesPro Education, India</div>
+        <div class="edu-period">2019 – 2020 · 6 Months</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BRIDGE 5: Education → Certs ===== -->
+<div class="section-bridge" id="bridge-certs">
+  <div class="divider-line"></div>
+  <div class="fall-zone" id="fz-certs"></div>
+  <div class="bridge-label">// VERIFYING CREDENTIALS //</div>
+</div>
+
+<!-- ==================== CERTIFICATIONS ==================== -->
+<section id="certs">
+  <div class="section-wrap">
+    <p class="sec-label reveal">// CREDENTIALS</p>
+    <h2 class="sec-title reveal" id="title-certs">Certifications</h2>
+    <div class="certs-grid">
+      <div class="cert-card reveal-pop"><div class="cert-yr">26</div><div class="cert-icon">🛡️</div><div class="cert-name">Security Awareness Foundations (SAF)</div><div class="cert-issuer">Issued Apr 06, 2026</div></div>
+      <div class="cert-card reveal-pop" style="transition-delay:.1s"><div class="cert-yr">25</div><div class="cert-icon">📊</div><div class="cert-name">Project Management</div><div class="cert-issuer">LearnTube · ID: DJA-B-1-1351679-0</div></div>
+      <div class="cert-card reveal-pop" style="transition-delay:.2s"><div class="cert-yr">24</div><div class="cert-icon">⚙️</div><div class="cert-name">Lean Six Sigma & RPA Dynamics</div><div class="cert-issuer">HRD University</div></div>
+      <div class="cert-card reveal-pop" style="transition-delay:.3s"><div class="cert-yr">22</div><div class="cert-icon">🧪</div><div class="cert-name">Software Testing – Automation & Manual</div><div class="cert-issuer">Luminar Techno Lab</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div style="font-size:2rem;margin-bottom:1rem">🚀</div>
+  <div class="foot-name">SREEJITH SREEKUMAR</div>
+  <p style="color:rgba(200,220,255,.35);font-size:.82rem;letter-spacing:2px;margin-top:.3rem">IT SPECIALIST · APPLICATION SUPPORT · QA ENGINEER · FINTECH</p>
+  <div class="foot-contact">
+    <span>📧 <a href="mailto:nandukallelil@gmail.com">nandukallelil@gmail.com</a></span>
+    <span>📱 +974-30410095 / +974-30452247</span>
+    <span>📍 Doha, Qatar</span>
+  </div>
+  <div class="foot-copy">&lt;/SREEJITH_CV · BUILD_2026.05 · QATAR&gt;</div>
+</footer>
+
+<script>
+// ======================== CURSOR ========================
+const cur = document.getElementById('cur'), dot = document.getElementById('cur-dot');
+let mx=window.innerWidth/2, my=window.innerHeight/2;
+document.addEventListener('mousemove', e => {
+  mx=e.clientX; my=e.clientY;
+  dot.style.left=mx-2.5+'px'; dot.style.top=my-2.5+'px';
+  cur.style.left=mx-12+'px'; cur.style.top=my-12+'px';
+});
+document.querySelectorAll('a,button,.exp-card,.proj-card,.chip,.cert-card,.skill-cat').forEach(el=>{
+  el.addEventListener('mouseenter',()=>cur.classList.add('big'));
+  el.addEventListener('mouseleave',()=>cur.classList.remove('big'));
+});
+
+// ======================== BG CANVAS ========================
+const canvas=document.getElementById('bgc'), ctx=canvas.getContext('2d');
+let W,H,pts=[];
+function resize(){ W=canvas.width=window.innerWidth; H=canvas.height=window.innerHeight; }
+resize(); window.addEventListener('resize',()=>{resize();initPts();});
+
+class Pt{
+  constructor(){this.reset();}
+  reset(){
+    this.x=Math.random()*W; this.y=Math.random()*H;
+    this.vx=(Math.random()-.5)*.5; this.vy=(Math.random()-.5)*.5;
+    this.r=Math.random()*2+.5; this.a=Math.random()*.5+.1;
+    this.c=Math.random()>.6?'#00f5ff':Math.random()>.5?'#0066ff':'#7b2fff';
+  }
+  update(){
+    this.x+=this.vx+Math.sin(Date.now()*.0008+this.y*.012)*.15;
+    this.y+=this.vy+Math.cos(Date.now()*.0008+this.x*.012)*.15;
+    if(this.x<0)this.x=W; if(this.x>W)this.x=0;
+    if(this.y<0)this.y=H; if(this.y>H)this.y=0;
+  }
+  draw(){
+    ctx.beginPath(); ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
+    ctx.fillStyle=this.c; ctx.globalAlpha=this.a; ctx.fill();
+  }
+}
+function initPts(){ pts=[]; const n=Math.min(100,Math.floor(W*H/9000)); for(let i=0;i<n;i++)pts.push(new Pt()); }
+initPts();
+
+let sphereA=0, hexA=0;
+function drawSphere(cx,cy,r,al){
+  sphereA+=.002;
+  ctx.globalAlpha=al; ctx.strokeStyle='#0066ff'; ctx.lineWidth=.5;
+  for(let i=0;i<=5;i++){
+    const lat=(i/5)*Math.PI-Math.PI/2; const rr=Math.cos(lat)*r; const yy=Math.sin(lat)*r;
+    ctx.beginPath();
+    for(let a=0;a<=360;a+=6){const rad=(a+sphereA*20)*Math.PI/180; const x=cx+Math.cos(rad)*rr; const y=cy+yy; a===0?ctx.moveTo(x,y):ctx.lineTo(x,y);} ctx.stroke();
+  }
+  for(let i=0;i<6;i++){
+    const lon=(i/6)*Math.PI*2+sphereA; ctx.beginPath();
+    for(let a=0;a<=180;a+=6){const lat2=(a/180)*Math.PI-Math.PI/2; const rr2=Math.cos(lat2)*r; const x=cx+Math.cos(lon)*rr2; const y=cy+Math.sin(lat2)*r; a===0?ctx.moveTo(x,y):ctx.lineTo(x,y);} ctx.stroke();
+  }
+}
+function drawHex(cx,cy,sz,al){
+  hexA+=.0008; ctx.save(); ctx.translate(cx,cy); ctx.rotate(hexA);
+  ctx.globalAlpha=al; ctx.strokeStyle='#7b2fff'; ctx.lineWidth=.5;
+  for(let q=-2;q<=2;q++){for(let r2=-2;r2<=2;r2++){
+    const x=sz*1.5*q; const y=sz*Math.sqrt(3)*(r2+q/2);
+    if(Math.sqrt(x*x+y*y)>sz*3.5)continue;
+    ctx.beginPath();
+    for(let i=0;i<6;i++){const angle=(Math.PI/3)*i; ctx.lineTo(x+sz*.85*Math.cos(angle),y+sz*.85*Math.sin(angle));}
+    ctx.closePath(); ctx.stroke();
+  }} ctx.restore();
+}
+
+function animBG(){
+  ctx.clearRect(0,0,W,H);
+  for(let y=0;y<H;y+=4){ctx.globalAlpha=.012;ctx.fillStyle='#000';ctx.fillRect(0,y,W,2);}
+  drawSphere(W*.88,H*.15,90,.05); drawSphere(W*.08,H*.75,60,.04);
+  drawHex(W*.5,H*.5,35,.03);
+  pts.forEach(p=>{p.update();p.draw();});
+  // connections
+  for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){
+    const dx=pts[i].x-pts[j].x, dy=pts[i].y-pts[j].y, d=Math.sqrt(dx*dx+dy*dy);
+    if(d<140){ctx.globalAlpha=(1-d/140)*.12;ctx.strokeStyle='#00f5ff';ctx.lineWidth=.4;ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.stroke();}
+  }
+  ctx.globalAlpha=1;
+  requestAnimationFrame(animBG);
+}
+animBG();
+
+// ======================== NAVIGATION ========================
+const sections=['hero','experience','skills','projects','education','certs'];
+const navLinks=document.querySelectorAll('.nav-link');
+const sideDots=document.querySelectorAll('.sp-dot');
+
+function jumpTo(id){
+  document.getElementById(id)?.scrollIntoView({behavior:'smooth'});
+}
+
+function updateNav(id){
+  const idx=sections.indexOf(id);
+  navLinks.forEach((l,i)=>l.classList.toggle('active',i===idx));
+  sideDots.forEach((d,i)=>d.classList.toggle('act',i===idx));
+}
+
+// ======================== SCROLL REVEAL ========================
+const allReveals=document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.reveal-pop,.sec-title');
+const revealObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){ e.target.classList.add('visible'); revealObs.unobserve(e.target); }
+  });
+},{threshold:0.1});
+allReveals.forEach(r=>revealObs.observe(r));
+
+// Section observer for nav
+const secObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) updateNav(e.target.id); });
+},{threshold:0.3});
+sections.forEach(id=>{ const el=document.getElementById(id); if(el) secObs.observe(el); });
+
+// ======================== COUNT UP ========================
+const statNums=document.querySelectorAll('.stat-num[data-count]');
+const countObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const target=parseInt(e.target.dataset.count); let cur2=0; const step=target/40;
+      const t=setInterval(()=>{ cur2+=step; if(cur2>=target){cur2=target;clearInterval(t);} e.target.textContent=Math.floor(cur2)+'+'; },35);
+      countObs.unobserve(e.target);
+    }
+  });
+},{threshold:.5});
+statNums.forEach(n=>countObs.observe(n));
+
+// Stat bar fills
+const statBars=document.querySelectorAll('.stat-bar-fill[data-pct]');
+const barObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.style.width=e.target.dataset.pct+'%'; barObs.unobserve(e.target); } });
+},{threshold:.5});
+statBars.forEach(b=>barObs.observe(b));
+
+// Skill bars
+const skillBars=document.querySelectorAll('.skill-bar-fill[data-w]');
+const skillBarObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ setTimeout(()=>e.target.style.width=e.target.dataset.w+'%',200); skillBarObs.unobserve(e.target); } });
+},{threshold:.3});
+skillBars.forEach(b=>skillBarObs.observe(b));
+
+// ======================== CARD TILT ========================
+document.querySelectorAll('.exp-card,.proj-card').forEach(card=>{
+  card.addEventListener('mousemove',e=>{
+    const r=card.getBoundingClientRect();
+    const x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5;
+    // Update shine
+    const shine=card.querySelector('.card-shine');
+    if(shine){ shine.style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%'); shine.style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%'); }
+    card.style.transform=`translateX(${card.classList.contains('exp-card')?8:0}px) translateY(-6px) rotateX(${-y*7}deg) rotateY(${x*7}deg)`;
+  });
+  card.addEventListener('mouseleave',()=>{ card.style.transform=''; });
+});
+
+// ======================== SECTION HEADER WAVE ========================
+document.querySelectorAll('.sec-title').forEach(title=>{
+  const text=title.textContent;
+  title.innerHTML=text.split('').map((c,i)=>`<span class="char" style="--ci:${i*.04}s">${c==' '?'&nbsp;':c}</span>`).join('');
+});
+
+// ======================== FALLING OBJECTS BETWEEN SECTIONS ========================
+const fallConfigs={
+  'fz-exp':[
+    {shape:'cube',x:'15%',delay:0},{shape:'triangle',x:'35%',delay:.2},{shape:'circle',x:'55%',delay:.1},
+    {shape:'diamond',x:'72%',delay:.3},{shape:'cube',x:'85%',delay:.15}
+  ],
+  'fz-skills':[
+    {shape:'gear',x:'20%',delay:.1},{shape:'code',x:'40%',delay:0},{shape:'diamond',x:'60%',delay:.2},
+    {shape:'circle',x:'78%',delay:.15}
+  ],
+  'fz-projects':[
+    {shape:'triangle',x:'10%',delay:.05},{shape:'cube',x:'30%',delay:.2},{shape:'circle',x:'50%',delay:0},
+    {shape:'gear',x:'68%',delay:.25},{shape:'diamond',x:'88%',delay:.1}
+  ],
+  'fz-edu':[
+    {shape:'book',x:'25%',delay:.1},{shape:'circle',x:'50%',delay:0},{shape:'diamond',x:'75%',delay:.2}
+  ],
+  'fz-certs':[
+    {shape:'star',x:'20%',delay:0},{shape:'cube',x:'45%',delay:.15},{shape:'star',x:'70%',delay:.05},{shape:'diamond',x:'88%',delay:.2}
+  ]
+};
+
+function makeSVG(shape){
+  const s=36, c='rgba(0,245,255,0.7)', c2='rgba(0,102,255,0.5)';
+  const svgs={
+    cube:`<svg width="${s}" height="${s}" viewBox="0 0 36 36" fill="none"><rect x="8" y="8" width="20" height="20" stroke="${c}" stroke-width="1.5" fill="rgba(0,245,255,0.05)"/><line x1="8" y1="8" x2="4" y2="4" stroke="${c2}" stroke-width="1"/><line x1="28" y1="8" x2="32" y2="4" stroke="${c2}" stroke-width="1"/><line x1="28" y1="28" x2="32" y2="32" stroke="${c2}" stroke-width="1"/><line x1="8" y1="28" x2="4" y2="32" stroke="${c2}" stroke-width="1"/><rect x="4" y="4" width="20" height="20" stroke="${c2}" stroke-width="1" fill="none"/></svg>`,
+    triangle:`<svg width="${s}" height="${s}" viewBox="0 0 36 36" fill="none"><polygon points="18,4 33,30 3,30" stroke="${c}" stroke-width="1.5" fill="rgba(0,245,255,0.04)"/><polygon points="18,11 28,29 8,29" stroke="${c2}" stroke-width="1" fill="none"/></svg>`,
+    circle:`<svg width="${s}" height="${s}" viewBox="0 0 36 36" fill="none"><circle cx="18" cy="18" r="14" stroke="${c}" stroke-width="1.5" stroke-dasharray="4 3"/><circle cx="18" cy="18" r="8" stroke="${c2}" stroke-width="1"/><circle cx="18" cy="18" r="3" fill="${c}" opacity="0.6"/></svg>`,
+    diamond:`<svg width="${s}" height="${s}" viewBox="0 0 36 36" fill="none"><polygon points="18,3 33,18 18,33 3,18" stroke="${c}" stroke-width="1.5" fill="rgba(123,47,255,0.06)"/><polygon points="18,10 26,18 18,26 10,18" stroke="${c2}" stroke-width="1" fill="none"/></svg>`,
+    gear:`<svg width="${s}" height="${s}" viewBox="0 0 36 36" fill="none"><circle cx="18" cy="18" r="9" stroke="${c}" stroke-width="1.5"/><circle cx="18" cy="18" r="4" stroke="${c2}" stroke-width="1"/>${[0,45,90,135,180,225,270,315].map(a=>{const rad=a*Math.PI/180;const ix=18+Math.cos(rad)*9;const iy=18+Math.sin(rad)*9;const ox=18+Math.cos(rad)*14;const oy=18+Math.sin(rad)*14;return`<line x1="${ix}" y1="${iy}" x2="${ox}" y2="${oy}" stroke="${c}" stroke-width="2"/>`}).join('')}</svg>`,
+    star:`<svg width="${s}" height="${s}" viewBox="0 0 36 36" fill="none"><polygon points="18,3 21,14 33,14 23,21 27,33 18,26 9,33 13,21 3,14 15,14" stroke="${c}" stroke-width="1.5" fill="rgba(255,215,0,0.07)"/></svg>`,
+    book:`<svg width="${s}" height="${s}" viewBox="0 0 36 36" fill="none"><rect x="6" y="5" width="24" height="28" rx="2" stroke="${c}" stroke-width="1.5" fill="rgba(0,245,255,0.04)"/><line x1="6" y1="5" x2="6" y2="33" stroke="${c2}" stroke-width="3"/><line x1="11" y1="12" x2="26" y2="12" stroke="${c2}" stroke-width="1"/><line x1="11" y1="17" x2="26" y2="17" stroke="${c2}" stroke-width="1"/><line x1="11" y1="22" x2="20" y2="22" stroke="${c2}" stroke-width="1"/></svg>`,
+    code:`<svg width="${s}" height="${s}" viewBox="0 0 36 36" fill="none"><polyline points="13,10 4,18 13,26" stroke="${c}" stroke-width="1.5" fill="none"/><polyline points="23,10 32,18 23,26" stroke="${c}" stroke-width="1.5" fill="none"/><line x1="20" y1="8" x2="16" y2="28" stroke="${c2}" stroke-width="1"/></svg>`
+  };
+  return svgs[shape]||svgs.cube;
+}
+
+function buildFallZone(id, config){
+  const zone=document.getElementById(id);
+  if(!zone)return;
+  config.forEach((item,i)=>{
+    const obj=document.createElement('div');
+    obj.className='fall-obj';
+    obj.style.left=item.x;
+    obj.style.top='10px';
+    obj.style.setProperty('--delay',item.delay+'s');
+    obj.style.setProperty('--dur',(1.2+Math.random()*.6)+'s');
+    obj.style.setProperty('--rot',(Math.random()*360)+'deg');
+    obj.style.setProperty('--rot2',(Math.random()*360)+'deg');
+    obj.style.setProperty('--rot3',(Math.random()*360)+'deg');
+    obj.style.setProperty('--rot4',(Math.random()*360)+'deg');
+    obj.innerHTML=makeSVG(item.shape);
+    zone.appendChild(obj);
+  });
+}
+
+Object.entries(fallConfigs).forEach(([id,cfg])=>buildFallZone(id,cfg));
+
+// Trigger fall animations when bridge enters view
+const bridgeObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const objs=e.target.querySelectorAll('.fall-obj');
+      objs.forEach(o=>{ o.style.animationPlayState='running'; });
+    }
+  });
+},{threshold:.2});
+document.querySelectorAll('.section-bridge').forEach(b=>{ bridgeObs.observe(b); });
+
+// Restart fall on re-entry by cloning
+const bridgeRestartObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const zone=e.target.querySelector('.fall-zone');
+      if(!zone)return;
+      const clones=Array.from(zone.children);
+      clones.forEach(c=>{
+        const cl=c.cloneNode(true);
+        zone.replaceChild(cl,c);
+      });
+    }
+  });
+},{threshold:.1});
+document.querySelectorAll('.section-bridge').forEach(b=>bridgeRestartObs.observe(b));
+
+// ======================== TRANSITION FLASH ========================
+const tcanvas=document.getElementById('transition-canvas');
+const tctx=tcanvas.getContext('2d');
+tcanvas.width=window.innerWidth; tcanvas.height=window.innerHeight;
+window.addEventListener('resize',()=>{tcanvas.width=window.innerWidth;tcanvas.height=window.innerHeight;});
+
+function flashTransition(color='#00f5ff'){
+  let alpha=0.25; tcanvas.style.opacity=1;
+  const fade=()=>{
+    tctx.clearRect(0,0,tcanvas.width,tcanvas.height);
+    tctx.fillStyle=color; tctx.globalAlpha=alpha;
+    tctx.fillRect(0,0,tcanvas.width,tcanvas.height);
+    // scan lines
+    tctx.globalAlpha=alpha*.3; tctx.fillStyle='#fff';
+    for(let y=0;y<tcanvas.height;y+=3){ tctx.fillRect(0,y,tcanvas.width,1); }
+    alpha-=0.012;
+    if(alpha>0) requestAnimationFrame(fade);
+    else{ tctx.clearRect(0,0,tcanvas.width,tcanvas.height); tcanvas.style.opacity=0; }
+  };
+  requestAnimationFrame(fade);
+}
+
+// Trigger flash on bridge visibility
+const flashObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const colors=['#00f5ff','#0066ff','#7b2fff','#00f5ff','#0066ff'];
+      const idx=Array.from(document.querySelectorAll('.section-bridge')).indexOf(e.target);
+      flashTransition(colors[idx]||'#00f5ff');
+    }
+  });
+},{threshold:.5});
+document.querySelectorAll('.section-bridge').forEach(b=>flashObs.observe(b));
+
+// ======================== TOAST SYSTEM ========================
+const toastEl=document.getElementById('toast');
+const toasts=[
+  {section:'experience',msg:'// 7+ YEARS OF HANDS-ON TECH EXPERIENCE',color:'var(--cyan)'},
+  {section:'skills',msg:'// MULTI-DOMAIN TECHNICAL EXPERTISE',color:'var(--blue)'},
+  {section:'projects',msg:'// 12 HIGH-IMPACT PROJECTS DELIVERED',color:'var(--purple)'},
+  {section:'education',msg:'// ENGINEERING + FINANCE FOUNDATION',color:'var(--gold)'},
+  {section:'certs',msg:'// CONTINUOUSLY UPSKILLING',color:'var(--cyan)'},
+];
+const shownToasts=new Set();
+const toastObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting && !shownToasts.has(e.target.id)){
+      shownToasts.add(e.target.id);
+      const t=toasts.find(t=>t.section===e.target.id);
+      if(t){ showToast(t.msg,t.color); }
+    }
+  });
+},{threshold:.4});
+sections.slice(1).forEach(id=>{ const el=document.getElementById(id); if(el) toastObs.observe(el); });
+
+let toastTimer=null;
+function showToast(msg,color='var(--cyan)'){
+  clearTimeout(toastTimer);
+  toastEl.textContent=msg; toastEl.style.color=color; toastEl.style.borderColor=color;
+  toastEl.style.boxShadow=`0 0 30px ${color}40`;
+  toastEl.classList.add('show');
+  toastTimer=setTimeout(()=>toastEl.classList.remove('show'),3500);
+}
+
+// ======================== PARALLAX GRID ========================
+window.addEventListener('scroll',()=>{
+  const grid=document.querySelector('.hero-grid');
+  if(grid){ grid.style.transform=`rotateX(55deg) scale(2.2) translateY(${window.scrollY*.25}px)`; }
+});
+
+// ======================== HERO NAME GLITCH ========================
+const heroName=document.getElementById('heroName');
+function glitch(){
+  if(!heroName)return;
+  const chars='SREEJITHSREEKUMAR!@#$%^&*';
+  const orig=['SREEJITH','SREEKUMAR'];
+  let iter=0;
+  const t=setInterval(()=>{
+    heroName.innerHTML=orig.map(w=>{
+      return w.split('').map((c,i)=>i<iter?`<span>${c}</span>`:`<span style="color:var(--cyan)">${chars[Math.floor(Math.random()*chars.length)]}</span>`).join('');
+    }).join('<br>');
+    if(iter>=8){ clearInterval(t); heroName.innerHTML=orig.join('<br>'); }
+    iter+=.5;
+  },40);
+}
+setTimeout(glitch,1200);
+setInterval(glitch,6000);
+
+// ======================== FLOATING PARTICLES ========================
+function spawnParticle(){
+  const p=document.createElement('div');
+  Object.assign(p.style,{
+    position:'fixed',bottom:'-10px',left:Math.random()*100+'vw',
+    width:'3px',height:'3px',background:Math.random()>.5?'var(--cyan)':'var(--blue)',
+    borderRadius:'50%',pointerEvents:'none',zIndex:'0',opacity:'0',
+    animation:`particleRise ${4+Math.random()*5}s linear forwards`,
+    '--tx':(Math.random()-.5)*200+'px'
+  });
+  document.body.appendChild(p);
+  setTimeout(()=>p.remove(),10000);
+}
+const pStyle=document.createElement('style');
+pStyle.textContent=`@keyframes particleRise{0%{opacity:0;transform:translateY(0) translateX(0)}10%{opacity:.8}90%{opacity:.5}100%{opacity:0;transform:translateY(-100vh) translateX(var(--tx,0px))}}`;
+document.head.appendChild(pStyle);
+setInterval(spawnParticle,600);
+
+// ======================== SECTION TITLE TYPING ========================
+function typeTitle(el){
+  if(!el)return;
+  const text=el.querySelector('.char')?Array.from(el.querySelectorAll('.char')).map(c=>c.textContent).join(''):el.textContent;
+  const orig=el.innerHTML;
+  const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let iter=0;
+  const interval=setInterval(()=>{
+    el.innerHTML=text.split('').map((c,i)=>{
+      if(c===' ')return'&nbsp;';
+      if(i<iter)return`<span class="char" style="--ci:0s">${c}</span>`;
+      return`<span class="char" style="color:var(--cyan);--ci:0s">${chars[Math.floor(Math.random()*chars.length)]}</span>`;
+    }).join('');
+    if(iter>=text.length){clearInterval(interval);el.innerHTML=orig;}
+    iter+=.5;
+  },30);
+}
+
+const titleObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ setTimeout(()=>typeTitle(e.target),300); titleObs.unobserve(e.target); } });
+},{threshold:.5});
+document.querySelectorAll('.sec-title').forEach(t=>titleObs.observe(t));
+
+// ======================== 3D CARD PERSPECTIVE STAGE ========================
+document.addEventListener('mousemove',e=>{
+  const cards=document.querySelectorAll('.proj-card');
+  cards.forEach(card=>{
+    const r=card.getBoundingClientRect();
+    const cx=r.left+r.width/2, cy=r.top+r.height/2;
+    const dx=(e.clientX-cx)/window.innerWidth, dy=(e.clientY-cy)/window.innerHeight;
+    const dist=Math.sqrt(dx*dx+dy*dy);
+    if(dist<.5){
+      const intensity=(1-dist/.5)*3;
+      card.style.transform=`perspective(800px) translateY(-6px) rotateX(${-dy*intensity*8}deg) rotateY(${dx*intensity*8}deg)`;
+    }
+  });
+});
+
+console.log('%c SREEJITH SREEKUMAR CV v2.0 ', 'background:#030814;color:#00f5ff;font-family:monospace;font-size:14px;padding:8px;border:1px solid #00f5ff;');
+</script>
+</body>
+</html>
